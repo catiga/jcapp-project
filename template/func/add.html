@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 功能管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/plugins/select2/select2.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/plugins/switchery/switchery.css(sp=${pub_bucket})}" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-lg-10">
+					<h2>系统功能管理</h2>
+					<ol class="breadcrumb">
+						<li><a href="index.html">Home</a></li>
+						<li><a href="javascript:;">系统功能</a></li>
+						<li class="active"><strong>添加功能</strong></li>
+					</ol>
+				</div>
+				<div class="col-lg-2"></div>
+			</div>
+			<div class="wrapper wrapper-content animated fadeInRight">
+				
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>基本信息</h5>
+								<div class="ibox-tools">
+									<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a> 
+									<a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#"> <i class="fa fa-wrench"></i></a>
+									<ul class="dropdown-menu dropdown-user">
+										<li><a href="#">Config option 1</a></li>
+									</ul>
+									<a class="close-link"> <i class="fa fa-times"></i></a>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<form method="get" class="form-horizontal">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">模块名称</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="func_name" name="func_name">
+										</div>
+									</div>
+									<div class="hr-line-dashed"></div>
+									
+									<div class="form-group">
+										<label class="col-sm-2 control-label">归属模块</label>
+										<div class="col-sm-5">
+											<select class="form-control" name="parent_id" id="parent_id">
+												<option></option>
+												<option th:each="f:${first_level_funcs}" th:value="${f.id }" th:text="${f.func_name }"></option>
+											</select>
+										</div>
+										<div class="col-sm-5">
+											<select class="form-control" name="sec_parent_id" id="sec_parent_id">
+												<option></option>
+											</select>
+										</div>
+									</div>
+									<div class="hr-line-dashed"></div>
+									
+									<div class="form-group">
+										<label class="col-sm-2 control-label">资源地址</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="click_url"> 
+											<span class="help-block m-b-none">访问控制链接.</span>
+										</div>
+									</div>
+									<div class="hr-line-dashed"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">显示位置</label>
+										<div class="col-sm-10">
+											<select class="form-control" id="func_type">
+												<option></option>
+												<option value="0000">页面功能</option>
+												<option value="1000">左侧菜单</option>
+											</select>
+										</div>
+									</div>
+									<div class="hr-line-dashed"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">可用范围</label>
+										<div class="col-sm-10">
+											<select class="form-control" id="func_range">
+												<option></option>
+												<option value="0">限根项目使用</option>
+												<option value="1">所有项目可用</option>
+											</select>
+										</div>
+									</div>
+									<div class="hr-line-dashed"></div>
+									
+									<div class="form-group">
+										<label class="col-sm-2 control-label">样式规则</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="sheet_type">
+										</div>
+									</div>
+									<div class="hr-line-dashed"></div>
+									
+									<div class="form-group">
+										<label class="col-sm-2 control-label">整体授权</label>
+										<div class="col-sm-10">
+											<input type="checkbox" class="js-switch" checked id="func_whole"/>
+										</div>
+									</div>
+									<div class="hr-line-dashed"></div>
+									
+									<div class="form-group">
+										<label class="col-sm-2 control-label">描述信息</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="notes" placeholder="请输入描述信息">
+										</div>
+									</div>
+									<div class="hr-line-dashed"></div>
+									
+									<div class="form-group">
+										<div class="col-sm-4 col-sm-offset-2">
+											<button class="btn btn-primary save_funcs" type="button">保存</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="../common/foot"></div>
+		</div>
+	</div>
+	
+	
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/js/plugins/select2/select2.full.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/switchery/switchery.js(sp=${pub_bucket})}"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	
+	<script>
+		$(document).ready(function() {
+
+			$('#loading-example-btn').click(function() {
+				btn = $(this);
+				simpleLoad(btn, true)
+
+				// Ajax example
+				//                $.ajax().always(function () {
+				//                    simpleLoad($(this), false)
+				//                });
+
+				simpleLoad(btn, false)
+			});
+		});
+
+		function simpleLoad(btn, state) {
+			if (state) {
+				btn.children().addClass('fa-spin');
+				btn.contents().last().replaceWith(" Loading");
+			} else {
+				setTimeout(function() {
+					btn.children().removeClass('fa-spin');
+					btn.contents().last().replaceWith(" Refresh");
+				}, 2000);
+			}
+		}
+	</script>
+</body>
+
+<script type="text/javascript">
+$(function() {
+	$("#func_type").select2({
+		placeholder: "选择显示位置"
+	});
+	$("#func_range").select2({
+		placeholder: "选择可用范围"
+	});
+	var elem = document.querySelector('.js-switch');
+	var switchery = new Switchery(elem, {
+		color : '#1AB394'
+	});
+	
+	$("#parent_id").select2({
+		placeholder: "选择一级模块",
+        allowClear: true
+	});
+	$("#sec_parent_id").select2({
+		placeholder: "选择二级模块",
+        allowClear: true
+	});
+	
+	$("#parent_id").on("change", function() {
+		var html = "<option></option>";
+		$("#sec_parent_id").html(html);
+		var url = "/project/func/aj/load_sons/?fp_id=" + $(this).val() + "&" + Date.parse(new Date);
+		$.get(url, {}, function(data) {
+			if(data.available) {
+				for(var i=0; i<data.data.length; i++) {
+					html+="<option value=\"" + data.data[i].id + "\">" + data.data[i].func_name + "</option>";
+				}
+				$("#sec_parent_id").html(html);
+				$("#sec_parent_id").select2({
+					placeholder: "选择二级模块"
+				});
+			}
+		});
+	});
+	
+	$(".save_funcs").on("click", function(){
+		var func_name = $.trim($("#func_name").val());
+		var func_type = $.trim($("#func_type").val());
+		var click_url = $.trim($("#click_url").val());
+		var notes = $.trim($("#notes").val());
+		var parent_id = $.trim($("#parent_id").val());
+		var func_whole = 0;
+		var sheet_type = $.trim($("#sheet_type").val());
+		
+		var func_range = $.trim($("#func_range").val());
+		
+		//获取是否选择了二级菜单
+		var sec_parent_id = $.trim($("#sec_parent_id").val());
+		if(sec_parent_id>0) {
+			parent_id = sec_parent_id;
+		}
+		
+		if($("#func_whole").is(":checked")) {
+			func_whole = 1;
+		}
+		
+		if(func_name==null||func_name=="") {
+			layer.msg("请输入模块名称", {icon: 2});
+			return;
+		}
+		if(func_type==null||func_type=="") {
+			layer.msg("请选择显示位置", {icon: 2});
+			return;
+		}
+		if(func_type=="1000"&&(click_url==null||click_url=="")) {
+			layer.msg("菜单功能必须输入链接地址", {icon: 2});
+			return;
+		}
+		if(func_range==null||func_range=="") {
+			layer.msg("请选择可用范围", {icon: 2});
+			return;
+		}
+		
+		var url = "/project/func/aj/save/?" + Date.parse(new Date());
+		var index = layer.load(0, {shade: false});
+		$.post(url, {func_name:func_name,func_type:func_type,
+			click_url:click_url,func_info:notes,parent_id:parent_id,whole:func_whole,func_ss:sheet_type,limpro:func_range}, function(data){
+			layer.close(index);
+			if(data.available) {
+				layer.alert('操作成功', {
+			        skin: 'layui-layer-lan',
+			        shift: 4 //动画类型
+			    }, function(){
+			    	location.href = "/project/func/list/?" + Date.parse(new Date());
+			    });
+			} else {
+				var code = data.messages[0];
+				var msg = "未知错误";
+				if(code=="input_param_error") {
+					msg = "输入参数错误";
+				} else if(code=="status_invalid") {
+					msg = "左侧菜单必须输入链接地址";
+				}
+				layer.msg(msg, {icon: 2});
+			}
+		});
+	});
+});
+</script>
+
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 用户管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/sweetalert/sweetalert.css|" rel="stylesheet">
+
+<link th:href="@{{sp}/css/plugins/select2/select2.min.css(sp=${pub_bucket})}" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-sm-4">
+					<h2>后台用户管理</h2>
+					<ol class="breadcrumb">
+						<li><a href="javascript:;">Home</a></li>
+						<li><a href="javascript:;">后台用户</a></li>
+						<li class="active"><strong>列表</strong></li>
+					</ol>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="wrapper wrapper-content animated fadeInUp">
+						<div class="ibox">
+							<div class="ibox-title">
+								<div class="ibox-tools">
+									<select data-placeholder="选择" id="select_proj" class="chosen-select" style="width:250px;display: inline-block;;float:left; padding:0; margin: 0 0 7px" tabindex="2">
+										<option></option>
+										<option value="0">全部</option>
+										<option th:each="st:${proj_page.result}" th:value="${st.id}" th:selected="${sp==st.id}" th:text="${st.proj_name}"></option>
+									</select>
+									<a href="javascript:void(0)" class="btn btn-primary btn-xs add_new_data">添加用户</a>
+									<input type="text" placeholder="输入姓名或者绑定手机" style="float:left" id="name_moile" th:value="${name_moile}">
+									<a href="javascript:void(0)" class="btn btn-primary btn-xs find_user" style="float:left">查询用户</a>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<div class="table-responsive">
+                                	<table class="table table-striped">
+										<thead>
+		                                    <tr>
+		                                        <th>账号</th>
+		                                        <th>姓名</th>
+		                                        <th>绑定手机</th>
+		                                        <th>状态</th>
+		                                        <th>更新日期</th>
+		                                        <th>项目</th>
+		                                        <th>操作</th>
+		                                    </tr>
+	                                    </thead>
+										<tbody>
+											<tr th:each="f:${page.result}" th:attr_id="${f.id }">
+												<td>
+													[[${f.name }]]
+												</td>
+												<td>
+													<a href="javascript:;">[[${f.username}]]</a><br/> 
+													<small>创建时间 [[${#dates.format(f.a_time, 'yyyy-MM-dd')}]]</small>
+												</td>
+												<td>[[${f.mobile}]]</td>
+												<td>
+													<span th:if="${f.status=='00'}">正常</span>
+												</td>
+												<td>[[${#dates.format(f.c_time, 'yyyy-MM-dd')}]]</td>
+												<td>[[${f.pname}]]</td>
+												<td>
+													<button class="btn btn-white btn-sm do_edit" th:attr_id="${f.id }"><i class="fa fa-pencil"></i> 编辑 </button>
+													<button class="btn btn-info btn-sm choose_role" type="button" th:attr_id="${f.id }"><i class="fa fa-paste"></i> 角色</button>
+													<button th:if="${root==1}" data-toggle="modal" href="#modal-form" class="btn btn-warning btn-sm bind_proj hide" type="button" th:attr_id="${f.id }"><i class="fa fa-paste"></i> 绑定项目</button>
+													<button class="btn btn-danger btn-sm hide" type="button" th:attr_id="${f.id }"><i class="fa fa-paste"></i> 修改密码</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+
+									<div th:replace="../../common/page"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="../../common/foot"></div>
+		</div>
+	</div>
+	
+	<div class="col-md-12 col-sm-12" id="check_box_list" style="display:none">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist" id="templatemo-tabs">
+			<li class="active"><a href="#home" role="tab" data-toggle="tab">选择角色</a></li>
+		</ul>
+
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<div class="tab-pane fade in active" id="home">
+				<ul class="list-group" id="role_list">
+				</ul>
+			</div>
+		</div>
+		<!-- tab-content -->
+	</div>
+	
+	
+	<div id="modal-form" class="modal inmodal fade" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12 b-r goods_area">
+		                    <div class="ibox ">
+		                        <div class="ibox-title">
+		                        	<h5>子项目选择</h5>
+		                        	<button type="button" class="close close_sku_list" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+		                        </div>
+		                        <div class="ibox-content GOODS_LIST">
+		                            <div class="spiner-example">
+		                                <div class="sk-spinner sk-spinner-wave">
+		                                    <div class="sk-rect1"></div>
+		                                    <div class="sk-rect2"></div>
+		                                    <div class="sk-rect3"></div>
+		                                    <div class="sk-rect4"></div>
+		                                    <div class="sk-rect5"></div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div id="templatemo-preferences-form" style="display:none;padding-left:15px;padding-right:15px">
+		<div class="row" th:if="${root==1}">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="belong_proj" class="control-label">所属项目</label>
+				<select name="belong_proj" class="form-control margin-bottom-15" id="belong_proj">
+					<option value="-1">选择</option>
+					<option th:each="st:${proj_page.result}" th:value="${st.id}" th:text="${st.proj_name}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="name" class="control-label">账号</label>
+				<input type="text" class="form-control" id="name" value="">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="key" class="control-label">密码</label>
+				<input type="text" class="form-control" id="key" value="">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="user" class="control-label">姓名</label>
+				<input type="text" class="form-control" id="user" value="">
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="mobile" class="control-label">手机号码</label>
+				<input type="text" class="form-control" id="mobile" value="" placeholder="">
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons" style="margin-top:15px">
+			<div class="col-md-12">
+				<button id="do_update_user" data-style="zoom-in" class="ladda-button btn btn-primary" style="width:100%">保存</button>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	<script th:src="|${pub_bucket}/js/plugins/sweetalert/sweetalert.min.js|"></script>
+	
+	<script th:src="@{{sp}/js/plugins/select2/select2.full.min.js(sp=${pub_bucket})}"></script>
+	
+</body>
+
+<script type="text/javascript">
+$(function() {
+	$("#select_proj").select2({placeholder:'选择'});
+	$("#select_proj").on("change", function() {
+		location.href = "/project/auth/user/list?sp="+$(this).val();
+	});
+	
+	$(".find_user").on("click",function(){
+		var name_moile = $("#name_moile").val();
+		location.href = "[[${contextPath}]]/auth/user/list?name_moile="+encodeURIComponent(encodeURIComponent(name_moile));
+	});
+	
+	$(".add_new_data").on("click", function(){
+		attr_u_id = 0;
+		$("#name").val('');
+		$("#key").val('');
+		$("#user").val('');
+		$("#mobile").val('');
+		$("#do_update_user").attr("disabled",false);
+		layer.open({
+			area : [ '60%', '80%'],
+			type : 1,
+			title:"添加用户",
+			content : $("#templatemo-preferences-form")
+		});
+	});
+	
+	var attr_u_id = 0;
+	$(".do_edit").on("click", function(){
+		var url = "/project/auth/user/aj/view?" + Date.parse(new Date());
+		attr_u_id = $(this).attr("attr_id");
+		var index = layer.load();
+		$.get(url, {u_id:attr_u_id}, function(data){
+			layer.close(index);
+			if(data.available) {
+				$("#name").val(data.data.name);
+				$("#user").val(data.data.username);
+				$("#mobile").val(data.data.mobile);
+				$("#key").val('');
+				$("#belong_proj").val(data.data.pid);
+				layer.open({
+					area : [ '60%', '80%'],
+					type : 1,
+					title:"编辑信息",
+					content : $("#templatemo-preferences-form")
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = "操作失败:" + code;
+				if(code=="input_param_error") {
+					msg = "输入参数错误";
+				} else if(code=="user_not_found") {
+					msg = "用户不存在或者已经被删除";
+				}
+				layer.msg('操作失败：' + msg, {shift: 6});
+			}
+		});
+	});
+	$("#do_update_user").on("click", function(){
+		var login_name = $("#name").val();
+		var password = $("#key").val();
+		var user_name = $("#user").val();
+		var mobile = $("#mobile").val();
+		var belong_proj = $("#belong_proj").val();
+		$("#do_update_user").attr("disabled",true);
+		var url = "/project/auth/user/aj/update";
+		$.post(url, {id:attr_u_id,username:user_name,mobile:mobile,login_name:login_name,password:password,belong_proj:belong_proj}, function(data) {
+		  $("#do_update_user").attr("disabled",false); 
+			if(data.available) {
+				layer.alert('操作成功', {
+			        skin: 'layui-layer-lan',
+			        shift: 4 //动画类型
+			    }, function(){
+			    	location.reload();					    	
+			    });
+			} else {
+				var code = data.messages[0];
+				var msg = "未知错误";
+				if(code=="input_param_error") {
+					msg = "输入参数错误";
+				} else if(code=="common_object_not_found") {
+					msg = "用户不存在或者已经被删除";
+				}
+				layer.msg('操作失败：' + msg, {shift: 6});
+			}
+		});
+	});
+	
+	$(".choose_role").on("click", function(){
+		var u_id = $(this).attr("attr_id");
+		var index = layer.load();
+		var url = "/project/auth/user/aj/view_u_role?" + Date.parse(new Date()) ;
+		$.get(url, {u_id:u_id}, function(data) {
+			layer.close(index);
+			console.log(data);
+			if(data.available&&data.data!=null&&data.data.length>0) {
+				var html = "";
+				for(var i=0; i<data.data.length; i++) {
+					var tmp_obj = data.data[i];
+					if(html=="") {
+						html = "<li class=\"list-group-item\">";
+					} else {
+						html = html + "<li class=\"list-group-item\">";
+					}
+					html = html + "<input type=\"checkbox\" name=\"role_item\" class=\"choose_role_checkbox\"";
+					if(tmp_obj.flag==1) {
+						html = html + " checked=\"true\" ";
+					}
+					html = html + "value=\"" + tmp_obj.id + "\"/> " + tmp_obj.role_name;
+					html = html + "</li>";
+				}
+				$("#role_list").html(html);
+				$(".choose_role_checkbox").on("click", function(){
+					var click_role_id = $(this).val();
+					var is_checked = $(this).attr("checked");
+					
+					var url = "/project/auth/user/aj/set_u_role";
+					var add_role = "1";
+					if(is_checked=="checked") {
+						$(this).removeAttr("checked");
+						add_role = "0";
+					} else {
+						$(this).attr("checked", "true");
+					}
+					var index = layer.load();
+					$.post(url, {u_id:u_id,r_id:click_role_id,type:add_role}, function(data){
+						layer.close(index);
+						if(data.available) {
+							layer.msg('操作成功', {icon: 1});
+						} else {
+							var code = data.messages[0];
+							var msg = "操作失败：" + code;
+							if(code=="input_param_error") {
+								msg = "输入参数错误";
+							} else if(code=="common_object_not_found") {
+								msg = "用户不存在或已经被删除"
+							}
+							layer.msg(msg, {
+								shift : 6
+							});
+						}
+					});
+				});
+				layer.open({
+					area : ['60%', '80%'],
+					type : 1,
+					title:"角色权限",
+					content : $("#check_box_list")
+				});
+			} else {
+				var code = data.messages[0];
+				if(code=='roles_empty') {
+					code = '未设置角色信息';
+				}
+				layer.msg('操作失败：' + code, {shift: 6});
+			}
+		});
+	});
+	
+	$(".bind_proj").on("click", function() {
+		var $this = $(this);
+		$.get('/project/auth/user/aj/pls', {}, function(data) {
+			if(data.available&&data.data!=null) {
+				var html = '<div class="tab-content">'
+				html += '<div id="tab-2" class="tab-pane active">';
+				html += '<div class="full-height-scroll">';
+				html += '<div class="table-responsive">';
+				html += '<table class="table table-striped table-hover">';
+				html += '<tbody>';
+				
+				for(x in data.data.result) {
+					var tmp_obj = data.data.result[x];
+					html += '<tr>';
+					html += '<td><a data-toggle="tab" href="javascript:void(0)" class="do_choose client-link" _id="' + tmp_obj.id + '">' + tmp_obj.proj_name + '</a></td>';
+					html += '<td class="_id"><i class="fa fa-flag"></i> ' + tmp_obj.domain + '</td>';
+					//html += '<td class="client-status"><button class="choose_gm btn btn-primary btn-circle" gmid="' + tmp_obj.id + '"><i class="fa fa-check"></i></button></td>';
+					html += '<td class="client-status"><button class="do_choose btn btn-primary btn-circle" _id="' + tmp_obj.id + '"><i class="fa fa-check"></i></button></td>';
+					html += '</tr>';
+				}
+				html += '</tbody></table></div></div></div></div>';
+				$(".GOODS_LIST").html(html);
+				$(".do_choose").on("click", function() {
+					var _id = $(this).attr("_id");
+					$.get('/project/auth/user/aj/bind', {user_id:$this.attr("attr_id"),p_id:_id}, function(data) {
+						if(data.available) {
+							swal({title: "Good job!", text: "项目关联成功", type: "success"}, function() {
+								$(".close_sku_list").trigger("click");
+							});
+						} else {
+							var code = data.messages[0];
+							var msg = "操作失败：" + code;
+							if(code=='op_repeat_error') {
+								layer.msg('绑定操作不可重复操作', {shift: 6});
+							} else {
+								layer.msg(msg, {shift: 6});
+							}
+						}
+					});
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = "没有用户数据：" + code;
+				layer.msg(msg, {shift: 6});
+			}
+		});
+	});
+});
+</script>
+
+</html>

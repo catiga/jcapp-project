@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 功能管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-sm-4">
+					<h2>系统功能管理</h2>
+					<ol class="breadcrumb">
+						<li><a href="index.html">Home</a></li>
+						<li><a href="javascript:;">系统功能</a></li>
+						<li class="active"><strong>功能列表</strong></li>
+					</ol>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="wrapper wrapper-content animated fadeInUp">
+
+						<div class="ibox">
+							<div class="ibox-title">
+								<h5 th:text="${parent}!=null?${parent.func_name } + '子模块':'模块信息'"></h5>
+								<div class="ibox-tools">
+									<a href="javascript:void(0)" class="btn btn-primary btn-xs add_new_func">添加功能</a>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<div class="row m-b-sm m-t-sm hide">
+									<div class="col-md-1">
+										<button type="button" id="loading-example-btn" class="btn btn-white btn-sm">
+											<i class="fa fa-refresh"></i> Refresh
+										</button>
+									</div>
+									<div class="col-md-11">
+										<div class="input-group">
+											<input type="text" placeholder="Search"
+												class="input-sm form-control"> <span
+												class="input-group-btn">
+												<button type="button" class="btn btn-sm btn-primary"> Go!</button>
+											</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="table-responsive">
+                                	<table class="table table-striped">
+										<thead>
+		                                    <tr>
+		                                        <th>名称</th>
+		                                        <th>位置</th>
+		                                        <th>整体授权</th>
+		                                        <th>可用范围</th>
+		                                        <th>更新日期</th>
+		                                        <th>操作</th>
+		                                    </tr>
+	                                    </thead>
+										<tbody>
+											<tr th:each="f:${page.result}" th:attr_id="${f.id }">
+												<td>
+													<a th:href="@{'/project/func/list/?pid=' + ${f.id}}">[[${f.func_name }]]</a><br/> 
+													<small>创建时间 [[${#dates.format(f.a_time, 'yyyy-MM-dd')}]]</small>
+												</td>
+												<td>
+													<span th:if="${f.func_type }=='1000'">菜单</span>
+													<span th:if="${f.func_type }=='0000'">页面</span>
+												</td>
+												<td>
+													<span th:if="${f.whole }">是</span>
+													<span th:if="${not f.whole }">否</span>
+												</td>
+												<td th:switch="${f.limpro}">
+													<span th:case="'0'">根项目</span>
+													<span th:case="'1'">全部项目</span>
+													<span th:case="*">[[${f.limpro}]]</span>
+												</td>
+												<td>[[${#dates.format(f.c_time, 'yyyy-MM-dd')}]]</td>
+												<td>
+													<a href="javascript:;" class="btn btn-white btn-sm do_edit" th:attr_id="${f.id }"><i class="fa fa-pencil"></i> Edit </a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+
+									<div th:replace="../common/page"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="../common/foot"></div>
+		</div>
+	</div>
+	
+	<div id="templatemo-preferences-form" style="display:none;padding-left:15px;padding-right:15px">
+		<div class="has-success has-feedback">
+			<div class="row">
+				<div class="col-md-6 margin-bottom-15">
+					<label class="control-label" for="func_name">功能名称</label> 
+					<input type="text" class="form-control" id="func_name">
+				</div>
+				<div class="col-md-6 margin-bottom-15">
+					<label for="func_parent" class="control-label">所属模块</label>
+					<input type="text" class="form-control" id="func_parent" value="" readonly>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 margin-bottom-15">
+				<label class="control-label" for="func_type">显示位置</label> 
+				<select name="func_type" class="form-control margin-bottom-15" id="func_type">
+					<option value="0000">页面功能</option>
+					<option value="1000">左侧菜单</option>
+				</select>
+			</div>
+			<div class="col-md-6 margin-bottom-15">
+				<label class="control-label" for="func_whole">是否整体授权</label> 
+				<select name="func_whole" class="form-control margin-bottom-15" id="func_whole">
+					<option value="0">否</option>
+					<option value="1">是</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label class="control-label" for="func_click_url">链接地址</label> 
+				<input type="text" class="form-control" id="func_click_url" value="">
+			</div>
+		</div>
+		<div class="has-success has-feedback">
+			<div class="row">
+				<div class="col-md-6 margin-bottom-15">
+					<label class="control-label" for="func_whole">可用范围</label> 
+					<select name="func_range" class="form-control margin-bottom-15" id="func_range">
+						<option value="0">根项目可用</option>
+						<option value="1">所有项目可用</option>
+					</select>
+				</div>
+				<div class="col-md-6 margin-bottom-15">
+					<label class="control-label" for="sheet_type">样式规则</label> 
+					<input name="sheet_type" type="text" class="form-control" id="sheet_type"> 
+				</div>
+			</div>
+		</div>
+		<div class="has-success has-feedback">
+			<div class="row">
+				<div class="col-md-12 margin-bottom-15">
+					<label class="control-label" for="func_note">备注信息</label> 
+					<textarea class="form-control" id="func_note"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons">
+			<div class="col-md-12">
+				<button id="do_update_func" class="btn btn-primary">更新</button>
+			</div>
+		</div>
+	</div>
+	
+	<div id="templatemo-preferences-form-group-info" style="display:none;padding-left:15px;padding-right:15px">
+		<div class="has-success has-feedback">
+			<div class="row">
+				<div class="col-md-12 margin-bottom-15">
+					<label class="control-label" for="group_name">分组名称</label> 
+					<input type="text" class="form-control" id="group_name"/>
+					<input type="hidden" id="group_id"/>
+					<span class="fa fa-check form-control-feedback"></span>
+				</div>
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons">
+			<div class="col-md-12">
+				<button id="do_update_group" class="btn btn-primary">更新</button>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+
+	<script>
+		$(document).ready(function() {
+
+			$('#loading-example-btn').click(function() {
+				btn = $(this);
+				simpleLoad(btn, true)
+
+				// Ajax example
+				//                $.ajax().always(function () {
+				//                    simpleLoad($(this), false)
+				//                });
+
+				simpleLoad(btn, false)
+			});
+		});
+
+		function simpleLoad(btn, state) {
+			if (state) {
+				btn.children().addClass('fa-spin');
+				btn.contents().last().replaceWith(" Loading");
+			} else {
+				setTimeout(function() {
+					btn.children().removeClass('fa-spin');
+					btn.contents().last().replaceWith(" Refresh");
+				}, 2000);
+			}
+		}
+	</script>
+</body>
+
+<script type="text/javascript">
+$(function() {
+	$(".add_new_func").on("click", function(){
+		location.href = "/project/func/add";
+	});
+	
+	var global_func_id = 0;
+	
+	$(".do_edit").on("click", function(){
+		var id = $(this).attr("attr_id");
+		var url = "/project/func/aj/view/?" + Date.parse(new Date());
+		var index = layer.load();
+		$.get(url, {f_id:id}, function(data){
+			layer.close(index);
+			if(data.available) {
+				global_func_id = data.data.id;
+				$("#func_name").val(data.data.func_name);
+				$("#func_click_url").val(data.data.click_url);
+				$("#func_note").html(data.data.func_info);
+				$("#func_type").val(data.data.func_type);
+				$("#sheet_type").val(data.data.func_ss);
+				$("#func_range").val(data.data.limpro);
+				if(data.data.whole) {
+					$("#func_whole").val("1");
+				} else {
+					$("#func_whole").val("0");
+				}
+				if(data.data.parent_id!=null)
+					$("#func_parent").val(data.data.parent_id);
+				else
+					$("#func_parent").val("一级模块");
+				layer.open({
+					area : ['40%', '60%'],
+					type : 1,
+					content : $("#templatemo-preferences-form")
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = "未知错误";
+				if(code=="input_param_error") {
+					msg = "输入参数错误";
+				} else if(code=="common_object_not_found") {
+					msg = "功能模块未找到或已经被删除"
+				}
+				layer.msg('操作失败：' + msg, {shift: 6});
+			}
+		});
+	});
+	
+	$("#do_update_func").on("click", function(){
+		var func_name = $("#func_name").val();
+		var func_click_url = $("#func_click_url").val();
+		var func_note = $("#func_note").val();
+		var func_type = $("#func_type").val();
+		var func_whole = $("#func_whole").val();
+		var sheet_type = $.trim($("#sheet_type").val());
+		var func_range = $.trim($("#func_range").val());
+		
+		if(func_range==null||func_range=="") {
+			layer.msg("请选择可用范围", {icon: 2});
+			return;
+		}
+		
+		var url = "/project/func/aj/update/?" + Date.parse(new Date());
+		var index = layer.load();
+		$.post(url,{id:global_func_id,func_name:func_name,click_url:func_click_url,
+			func_info:func_note,func_type:func_type,whole:func_whole,func_ss:sheet_type,limpro:func_range}, function(data){
+			layer.close(index);
+			if(data.available) {
+				layer.alert('操作成功', {
+			        skin: 'layui-layer-lan',
+			        shift: 4 //动画类型
+			    }, function(){
+			    	location.reload();					    	
+			    });
+			} else {
+				var code = data.messages[0];
+				var msg = "未知错误";
+				if(code=="input_param_error") {
+					msg = "输入参数错误";
+				} else if(code=="common_object_not_found") {
+					msg = "功能模块未找到或已经被删除"
+				}
+				layer.msg('操作失败：' + msg, {shift: 6});
+			}
+		});
+	});
+});
+</script>
+
+</html>

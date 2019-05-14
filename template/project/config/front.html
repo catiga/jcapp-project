@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 项目配置管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-sm-4">
+					<h2>[[${project.proj_name}]]</h2>
+					<ol class="breadcrumb">
+						<li><a href="javascript:;">Home</a></li>
+						<li class="active"><strong>配置列表</strong></li>
+					</ol>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="wrapper wrapper-content animated fadeInUp">
+
+						<div class="ibox">
+							<div class="ibox-title">
+								<h5>配置管理</h5>
+								<div class="ibox-tools">
+									<a href="javascript:void(0)" class="btn btn-primary btn-xs add_sys_config">添加配置</a>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<div class="table-responsive">
+                                	<table class="table table-striped">
+										<thead>
+		                                    <tr>
+		                                        <th>配置名称</th>
+		                                        <th>配置类型</th>
+		                                        <th>APPID</th>
+		                                        <th>APPKEY</th>
+		                                        <th>授权账户</th>
+		                                        <th>操作</th>
+		                                    </tr>
+	                                    </thead>
+										<tbody>
+											<tr th:each="c:${page.result}" th:attr_id="${c.id }">
+												<td>
+													<a href="javascript:;">[[${c.app_name }]]</a><br/> 
+													<small>创建时间 [[${#dates.format(c.a_time, 'yyyy-MM-dd')}]]</small>
+												</td>
+												<td>
+													<span th:if="${c.app_type=='10' }">订阅号</span>
+													<span th:if="${c.app_type=='20' }">服务号</span>
+													<span th:if="${c.app_type=='30' }">企业号</span>
+													<span th:if="${c.app_type=='40' }">小程序</span>
+													<span th:if="${c.app_type=='51' }">微信企业移动端</span>
+													<span th:if="${c.app_type=='901' }">支付宝生活号</span>
+												</td>
+												<td>[[${c.app_id }]]</td>
+												<td>[[${c.app_key }]]</td>
+												<td>
+													<span th:if="${c.user_gran==0 }">不是</span>
+													<span th:if="${c.user_gran==1 }">是</span>
+												</td>
+												<td>
+													<button class="btn btn-white btn-sm edit" th:attr_id="${c.id }"><i class="fa fa-pencil"></i> 编辑 </button>
+													<button class="btn btn-warning btn-sm user_grant" type="button" th:attr_id="${c.id }" th:if="${c.app_type=='20'} or ${c.app_type=='10'} or ${c.app_type=='40'} or ${c.app_type=='901'}"><i class="fa fa-paste"></i> 授权账户</button>
+													<!-- <button class="btn btn-danger btn-sm" type="button" th:attr_id="${c.id }"><i class="fa fa-trash"></i> 删除</button> -->
+												</td>
+											</tr>
+										</tbody>
+									</table>
+
+									<div th:replace="../../common/page"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="../../common/foot"></div>
+		</div>
+	</div>
+	
+	
+	<div id="templatemo-preferences-form" style="display:none;padding-left:15px;padding-right:15px">
+		<div class="row">
+			<div class="col-md-6 margin-bottom-15">
+				<label for="app_name" class="control-label">应用名</label>
+				<input type="text" class="form-control" id="app_name" value="">
+			</div>
+			<div class="col-md-6 margin-bottom-15">
+				<label for="app_type">应用类型</label> 
+				<select name="app_type" class="form-control margin-bottom-15" id="app_type">
+					<option value="10">订阅号</option>
+					<option value="20">服务号</option>
+					<option value="40">小程序</option>
+					<!-- <option value="30" th:if="${project.proj_type=='1000'} or ${project.proj_type=='1020'}">企业号</option>
+					<option value="51" th:if="${project.proj_type=='1000'} or ${project.proj_type=='1020'}">微信企业移动端</option>
+					
+					<option value="901" th:if="${project.proj_type=='2010'}">支付宝生活号</option> -->
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="app_id" class="control-label">APPID</label>
+				<input type="text" class="form-control" id="app_id" value="">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="app_key" class="control-label">APPKEY</label>
+				<textarea type="text" class="form-control" id="app_key"></textarea>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="app_token" class="control-label">APPTOKEN</label>
+				<textarea type="text" class="form-control" id="app_token"></textarea>
+			</div>
+		</div>
+		<div class="row" id="input_agent_id">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="agent_id" class="control-label">AGENTID</label>
+				<textarea type="text" class="form-control" id="agent_id"></textarea>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="app_encode_key" class="control-label">ENCODEKEY</label>
+				<textarea type="text" class="form-control" id="app_encode_key"></textarea>
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons" style="margin-top:15px">
+			<div class="col-md-12">
+				<button id="do_save_wx_config" class="btn btn-primary" style="width:100%">提交</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+
+	<script>
+		$(document).ready(function() {
+
+			$('#loading-example-btn').click(function() {
+				btn = $(this);
+				simpleLoad(btn, true)
+
+				// Ajax example
+				//                $.ajax().always(function () {
+				//                    simpleLoad($(this), false)
+				//                });
+
+				simpleLoad(btn, false)
+			});
+		});
+
+		function simpleLoad(btn, state) {
+			if (state) {
+				btn.children().addClass('fa-spin');
+				btn.contents().last().replaceWith(" Loading");
+			} else {
+				setTimeout(function() {
+					btn.children().removeClass('fa-spin');
+					btn.contents().last().replaceWith(" Refresh");
+				}, 2000);
+			}
+		}
+	</script>
+</body>
+
+<script type="text/javascript">
+$(function() {
+	var p_id = "[[${project.id}]]";
+	var c_id = 0;
+	
+	$(".add_sys_config").on("click", function(){
+		c_id = 0;
+		$("#app_id").val("");
+		$("#app_key").val("");
+		$("#app_token").val("");
+		$("#app_encode_key").val("");
+		$("#app_name").val("");
+		$("#app_type").val("-1");
+		layer.open({
+			area : [ '60%', '80%' ],
+			type : 1,
+			title:"添加配置",
+			content : $("#templatemo-preferences-form")
+		});
+	});
+	
+	$("#do_save_wx_config").on("click", function(){
+		var app_name = $("#app_name").val();
+		var app_type = $("#app_type").val();
+		var app_id = $("#app_id").val();
+		var app_key = $("#app_key").val();
+		var app_token = $("#app_token").val();
+		var app_encode_key = $("#app_encode_key").val();
+		
+		if(app_type=="-1"||app_type==null) {
+			layer.msg("请选择应用类型", {icon: 2});
+			return;
+		}
+		var agent_id = $.trim($("#agent_id").val());
+		
+		var url = "/project/project/config/aj/save";
+		var index = layer.load();
+		$.post(url, {p_id:p_id,id:c_id,app_name:app_name,app_type:app_type,app_id:app_id,
+			app_key:app_key,app_token:app_token,app_encode_key:app_encode_key,agent_id:agent_id}, function(data){
+			layer.close(index);
+			if(data.available) {
+				layer.alert('操作成功', {
+			        skin: 'layui-layer-lan',
+			        shift: 4 //动画类型
+			    }, function(){
+			    	location.reload();
+			    });
+			} else {
+				var code = data.messages[0];
+				var msg = "操作失败：" + code;
+				layer.msg(msg, {shift : 6});
+			}
+		});
+	});
+	
+	$(".edit").on("click", function(){
+		c_id = $(this).attr("attr_id");
+		var url = "/project/project/config/aj/view?" + Date.parse(new Date());
+		var index = layer.load();
+		$.get(url, {c_id:c_id}, function(data){
+			layer.close(index);
+			if(data.available) {
+				$("#app_id").val(data.data.app_id);
+				$("#app_key").val(data.data.app_key);
+				$("#app_token").val(data.data.app_token);
+				$("#app_encode_key").val(data.data.app_encode_key);
+				$("#app_name").val(data.data.app_name);
+				$("#app_type").val(data.data.app_type);
+				$("#agent_id").val(data.data.agent_id);
+				layer.open({
+					area : [ '60%', '80%' ],
+					type : 1,
+					title:"编辑信息",
+					content : $("#templatemo-preferences-form")
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = "加载失败：" + code;
+				layer.msg(msg, {shift : 6});
+			}
+		});
+	});
+	
+	$(".user_grant").on("click", function(){
+		var c_id = $(this).attr("attr_id");
+		var url = "/project/project/config/aj/set_user_grant/?c_id=" + c_id + "&" + Date.parse(new Date());
+		var index = layer.load();
+		$.get(url, {c_id:c_id}, function(data){
+			layer.close(index);
+			if(data.available) {
+				layer.alert('操作成功', {
+			        skin: 'layui-layer-lan',
+			        shift: 4 //动画类型
+			    }, function(){
+			    	location.reload();
+			    });
+			} else {
+				var code = data.messages[0];
+				var msg = "未知错误";
+				if(code=="common_object_not_found") {
+					msg = "该配置未找到或已经被删除"
+				} else if(code=="unsupport_operatioin") {
+					msg = "不支持此类操作";
+				}
+				layer.msg('操作失败：' + msg, {shift: 6});
+			}
+		});
+	});
+});
+</script>
+
+</html>

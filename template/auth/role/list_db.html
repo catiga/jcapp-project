@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 角色管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-sm-4">
+					<h2>后台角色管理</h2>
+					<ol class="breadcrumb">
+						<li><a href="javascript:;">Home</a></li>
+						<li><a href="javascript:;">后台角色</a></li>
+						<li class="active"><strong>列表</strong></li>
+					</ol>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="wrapper wrapper-content animated fadeInUp">
+
+						<div class="ibox">
+							<div class="ibox-title">
+								<h5 th:text="'后台角色列表'"></h5>
+								<div class="ibox-tools">
+									<a href="javascript:void(0)" class="btn btn-primary btn-xs add_new_data">添加角色</a>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<div class="table-responsive">
+                                	<table class="table table-striped">
+										<thead>
+		                                    <tr>
+		                                        <th>角色名称</th>
+		                                        <th>角色类型</th>
+		                                        <th>更新日期</th>
+		                                        <th>操作</th>
+		                                    </tr>
+	                                    </thead>
+										<tbody>
+											<tr th:each="f:${page.result}" th:attr_id="${f.id }">
+												<td>
+													<a href="javascript:;">[[${f.role_name }]]</a><br/> 
+													<small>创建时间 [[${#dates.format(f.a_time, 'yyyy-MM-dd')}]]</small>
+												</td>
+												<td>[[${f.role_type}]]</td>
+												<td>[[${#dates.format(f.c_time, 'yyyy-MM-dd')}]]</td>
+												<td>
+													<button class="btn btn-white btn-sm edit" th:attr_id="${f.id }"><i class="fa fa-pencil"></i> 编辑 </button>
+													<button class="btn btn-info btn-sm grant_funcs" type="button" th:attr_id="${f.id }"><i class="fa fa-paste"></i> 权限</button>
+													<button class="btn btn-warning btn-sm hide" type="button" th:attr_id="${f.id }"><i class="fa fa-paste"></i> 用户</button>
+													<button class="btn btn-danger btn-sm hide" type="button" th:attr_id="${f.id }"><i class="fa fa-trash"></i> 删除</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+
+									<div th:replace="../../common/page"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="../../common/foot"></div>
+		</div>
+	</div>
+	
+	<div id="templatemo-preferences-form" class="templatemo-preferences-form-role_info" style="display:none;padding-left:15px;padding-right:15px">
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label class="control-label" for="role_name">角色名称</label> 
+				<input type="text" class="form-control" id="role_name">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label class="control-label" for="role_type">角色类型</label> 
+				<select id="role_type" class="form-control margin-bottom-15">
+					<option value="1000">项目管理员</option>
+					<option value="3000">在线客服</option>
+					<option value="4000">门店员工</option>
+					<option value="5000">通知推送</option>
+					<option value="6000">专家技术类</option>
+					<option value="2000">其他类</option>
+				</select>
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons" style="margin-top:15px">
+			<div class="col-md-12">
+				<button class="btn btn-primary _update_" style="width:100%">更新</button>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-md-12 col-sm-12" id="check_box_list" style="display:none">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist" id="templatemo-tabs">
+			<li class="active"><a href="#home" role="tab" data-toggle="tab">加载中</a></li>
+		</ul>
+		<!-- Tab panes -->
+		<div class="tab-content">
+		</div>
+		<!-- tab-content -->
+	</div>
+	
+	<div class="col-md-12 col-sm-12" id="check_box_user_list" style="display:none">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist" id="templatemo-tabs-user">
+			<li class="active"><a href="#home" role="tab" data-toggle="tab">角色用户</a></li>
+		</ul>
+
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<div class="tab-pane fade in active" id="home">
+				<ul class="list-group" id="user_list">
+					<li class="list-group-item">
+					<input class="choose_role_checkbox" type="checkbox" value="1" name="role_item">
+					超级管理员
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- tab-content -->
+	</div>
+	
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+
+	<script>
+		$(document).ready(function() {
+
+			$('#loading-example-btn').click(function() {
+				btn = $(this);
+				simpleLoad(btn, true)
+
+				simpleLoad(btn, false)
+			});
+		});
+
+		function simpleLoad(btn, state) {
+			if (state) {
+				btn.children().addClass('fa-spin');
+				btn.contents().last().replaceWith(" Loading");
+			} else {
+				setTimeout(function() {
+					btn.children().removeClass('fa-spin');
+					btn.contents().last().replaceWith(" Refresh");
+				}, 2000);
+			}
+		}
+	</script>
+</body>
+
+<script type="text/javascript">
+$(function() {
+	$(".add_new_data").on("click", function(){
+		attr_r_id = 0;$("#role_name").val('');
+		layer.open({
+			area : [ '40%', '60%' ],
+			type : 1,
+			content : $(".templatemo-preferences-form-role_info")
+		});
+	});
+	
+	var attr_r_id = 0;
+	$(".edit").on("click", function(){
+		var url = "/project/auth/role/aj/view/?" + Date.parse(new Date());
+		attr_r_id = $(this).attr("attr_id");
+		var index = layer.load();
+		$.get(url, {id:attr_r_id}, function(data){
+			layer.close(index);
+			if(data.available) {
+				$("#role_name").val(data.data.role_name);
+				var r_t = data.data.role_type;
+				$("#role_type").val(r_t);
+				layer.open({
+					area : [ '40%', '60%' ],
+					type : 1,
+					content : $(".templatemo-preferences-form-role_info")
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = "操作失败";
+				if(code=="input_param_error") {
+					msg = "输入参数错误";
+				} else if(code=="common_object_not_found") {
+					msg = "角色不存在或者已经被删除";
+				}
+				layer.msg('操作失败：' + msg, {shift: 6});
+			}
+		});
+	});
+	
+	$("._update_").on("click", function() {
+		var role_name = $("#role_name").val();
+		var role_type = $("#role_type").val();
+		
+		var url = "/project/auth/role/aj/update?" + Date.parse(new Date());
+		var index = layer.load(0, {shade: false});
+		$.post(url, {id:attr_r_id,role_name:role_name,role_type:role_type}, function(data){
+			layer.close(index);
+			if(data.available) {
+				layer.alert('操作成功', {
+			        skin: 'layui-layer-lan',
+			        shift: 4 //动画类型
+			    }, function(){
+			    	location.reload();
+			    });
+			} else {
+				var code = data.messages[0];
+				if(code=="input_param_error") {
+					layer.msg("请检查输入参数", {icon: 2});
+				} else if(code=="object_repeat") {
+					layer.msg("角色名称或类型重复", {icon: 2});
+				} else if(code=="common_object_not_found") {
+					layer.msg("项目未找到", {icon: 2});
+				} else if(code=="permission_error") {
+					layer.msg("无权创建超级管理员", {icon: 2});
+				} else {
+					layer.msg("操作失败：" + code, {icon: 2});
+				} 
+			}
+		});
+	});
+	
+	$(".grant_funcs").on("click", function(){
+		attr_r_id = $(this).attr("attr_id");
+		var index = layer.load();
+		var url = "/project/auth/role/aj/choose_modules?" + new Date().getTime();
+		$.get(url, {r_id:attr_r_id}, function(data){
+			layer.close(index);
+			if(data.available) {
+				var html = "";
+				if(data.data==null||data.data.length==0) {
+					html = "<li class=\"active\"><a href=\"#home\" role=\"tab\" data-toggle=\"tab\">无可用模块</a></li>";
+					$("#templatemo-tabs").html(html);
+					return;
+				}
+				for(var i=0; i<data.data.length; i++) {
+					var tmp_obj = data.data[i];
+					var class_name = "module_name";
+					if(i==0) {
+						class_name = class_name + " active";
+					}
+					if(html=="") {
+						html = "<li attr_m_id=\"" + tmp_obj.id + "\" class=\"" + class_name + "\"><a href=\"#func_" + tmp_obj.id + "\" role=\"tab\" data-toggle=\"tab\">" + tmp_obj.func_name + "</a></li>";
+					} else {
+						html = html + "<li attr_m_id=\"" + tmp_obj.id + "\" class=\"" + class_name + "\"><a href=\"#func_" + tmp_obj.id + "\" role=\"tab\" data-toggle=\"tab\">" + tmp_obj.func_name + "</a></li>";
+					}
+				}
+				$("#templatemo-tabs").html(html);
+				
+				$(".module_name").on("click", function(){
+					var m_id = $(this).attr("attr_m_id");
+					var url = "/project/auth/role/aj/choose_mod_funcs";
+					var index = layer.load();
+					$.post(url, {m_id:m_id,r_id:attr_r_id}, function(data){
+						layer.close(index);
+						if(data.available&&data.data!=null&&data.data.length>0) {
+							var html = "<div class=\"tab-pane fade in active\" id=\func_" + m_id + "\">";
+							html = html + "<ul class=\"list-group\">";
+							for(var i=0; i<data.data.length; i++) {
+								var tmp_obj = data.data[i];
+								html = html + "<li class=\"list-group-item\">";
+								html = html + "<input type=\"checkbox\" value=\"" + tmp_obj.id + "\" class=\"choose_role_checkbox\" attr_has_son=\"" + tmp_obj.hasson + "\"";
+								if(tmp_obj.flag==1) {
+									html = html + " checked=\"true\" ";
+								}
+								html = html + "/> " + tmp_obj.func_name;
+								
+								var inner_html = "";
+								if(tmp_obj.hasson==true) {
+									//加载子项
+									$.ajax({
+										url:url,
+										type:'post',
+										async:false,
+										data:{m_id:tmp_obj.id,r_id:attr_r_id},
+										success:function(r_data) {
+											inner_html = inner_html + "<ul class='list-group'>";
+											for(var j=0; j<r_data.data.length; j++) {
+												var j_tmp_obj = r_data.obj[j];
+												inner_html = inner_html + "<li class=\"list-group-item\">";
+												inner_html = inner_html + "<input type=\"checkbox\" value=\"" + j_tmp_obj.id + "\" class=\"choose_role_checkbox\"";
+												if(j_tmp_obj.flag==1) {
+													inner_html = inner_html + " checked=\"true\" ";
+												}
+												inner_html = inner_html + "/> " + j_tmp_obj.func_name;
+												inner_html = inner_html + "</li>";
+											}
+											inner_html = inner_html + "</ul>";
+										}
+									});
+								}
+								
+								html = html + inner_html + "</li>";
+							}
+							html = html + "</ul>";
+							html = html + "</div>";
+							$(".tab-content").html(html);
+							
+							$(".choose_role_checkbox").on("click", function(){
+								var click_id = $(this).val();
+								var is_checked = $(this).attr("checked");
+								
+								var url = "/project/auth/role/aj/set_r_func";
+								var add_func = 1;
+								if(is_checked=="checked") {
+									$(this).removeAttr("checked");
+									add_func = 0;
+								} else {
+									$(this).attr("checked", "true");
+								}
+								var index = layer.load();
+								$.post(url, {r_id:attr_r_id,f_id:click_id,type:add_func}, function(data){
+									layer.close(index);
+									if(data.available) {
+										layer.msg('操作成功', {icon: 1});
+									} else {
+										var code = data.messages[0];
+										var msg = "未知错误";
+										if(code=="input_param_error") {
+											msg = "输入参数错误";
+										} else if(code=="common_object_not_found") {
+											msg = "功能不存在或已经被删除"
+										}
+										layer.msg(msg, {
+											shift : 6
+										});
+									}
+								});
+							});
+						} else {
+							var code = data.messages[0];
+							var msg = "未知错误";
+							if(code=="input_param_error") {
+								msg = "输入参数错误";
+							} else if(code=="common_object_not_found") {
+								msg = "模块不存在或已经被删除"
+							}
+							layer.msg(msg, {
+								shift : 6
+							});
+						}
+					});
+				});
+				
+				$(".module_name").each(function(){
+					if($(this).hasClass("active")) {
+						$(this).trigger("click");
+					}
+				});
+				
+				layer.open({
+					area : ['100%', '100%'],
+					type : 1,
+					content : $("#check_box_list")
+				});
+			} else {
+				var code = data.messages[0];
+				layer.msg('系统模块载入失败：' + code, {shift: 6});
+			}
+		});
+	});
+});
+</script>
+
+</html>

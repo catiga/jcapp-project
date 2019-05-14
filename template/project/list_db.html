@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 项目管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+
+<link th:href="|${pub_bucket}/css/plugins/ladda/ladda-themeless.min.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/sweetalert/sweetalert.css|" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-sm-4">
+					<h2>项目管理</h2>
+					<ol class="breadcrumb">
+						<li><a href="javascript:;">Home</a></li>
+						<li class="active"><strong>项目信息</strong></li>
+					</ol>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="wrapper wrapper-content animated fadeInUp">
+						<div class="ibox">
+							<div class="ibox-title">
+								<h5>系统项目列表</h5>
+								<div class="ibox-tools">
+									<a href="javascript:void(0)" class="btn btn-primary btn-xs add_new_sys_project">创建项目</a>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<div class="table-responsive">
+                                	<table class="table table-striped">
+										<thead>
+		                                    <tr>
+		                                        <th>状态</th>
+		                                        <th>名称</th>
+		                                        <th>信息</th>
+		                                        <th>域名</th>
+		                                        <th>logo</th>
+		                                        <th>联系电话</th>
+		                                        <th>操作</th>
+		                                    </tr>
+	                                    </thead>
+										<tbody>
+											<tr th:each="proj:${page.result}" th:attr_id="${proj.id }">
+												<td>
+													<span class="label label-primary" th:if="${proj.proj_status }=='10'">Active</span>
+													<span class="label label-default" th:if="${proj.proj_status }!='10'">Unactive</span>
+												</td>
+												<td>
+													<a href="javascript:;">[[${proj.proj_name }]]</a><br/> 
+													<small>创建时间 [[${#dates.format(proj.a_time, 'yyyy-MM-dd')}]]</small>
+												</td>
+												<td>[[${proj.brief}]]</td>
+												<td>
+													<a th:if="${proj.domain }" class="do_set_proj_domain" th:attr_id="${proj.id }">[[${proj.domain }]]</a>
+													<a th:if="${proj.domain }==null" class="do_set_proj_domain" th:attr_id="${proj.id }">未设置</a>
+												</td>
+												<td>
+													<a href="javascript:;">
+														<img th:if="${proj.logo!=null}" alt="image" class="img-circle" th:src="|http://pe1s.static.pdr365.com/${proj.logo}|" width="38px" height="38px">
+														<img th:if="${proj.logo==null}" alt="image" class="img-circle" th:src="@{{sp}/img/a3.jpg(sp=${pub_bucket})}" width="38" height="38">
+													</a>
+												</td>
+												<td>[[${proj.custom_phone}]]</td>
+												<td>
+													<button class="btn btn-white btn-sm edit" th:attr_id="${proj.id }"><i class="fa fa-pencil"></i> 编辑 </button>
+													<button class="btn btn-info btn-sm func_config" type="button" th:attr_id="${proj.id }"><i class="fa fa-paste"></i> 模块</button>
+													<button class="btn btn-warning btn-sm pay_config" type="button" th:attr_id="${proj.id }"><i class="fa fa-paste"></i> 支付</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<div th:replace="../common/page"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="../common/foot"></div>
+		</div>
+	</div>
+	
+	<div id="templatemo-preferences-form" style="display:none;padding-left:15px;padding-right:15px">
+		<div class="row">
+			<div class="col-md-6 margin-bottom-15">
+				<label for="proj_name" class="control-label">项目名称</label>
+				<input type="text" class="form-control" id="proj_name" value="">
+			</div>
+			<div class="col-md-6 margin-bottom-15">
+				<label for="proj_status">项目状态</label> 
+				<select name="proj_status" class="form-control margin-bottom-15" id="proj_status">
+					<option value="-1">选择</option>
+					<option value="10">运行</option>
+					<option value="20">停止</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="proj_logo" class="control-label">LOGO</label>
+				<input type="file" class="form-control" id="proj_logo">
+				<div id="result"></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="proj_key" class="control-label">安全码</label>
+				<input type="text" class="form-control" id="proj_key" value="">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="proj_brief" class="control-label">项目简介</label>
+				<input type="text" class="form-control" id="proj_brief" value="" placeholder="一句话项目信息">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="proj_info" class="control-label">项目描述</label>
+				<textarea type="text" class="form-control" rows="5" id="proj_info" value="" placeholder="项目详细信息"></textarea>
+			</div>
+		</div>
+		
+		<div class="has-success has-feedback">
+			<div class="row">
+				<div class="col-md-12 margin-bottom-15">
+					<label for="proj_custom_phone" class="control-label">联系电话</label>
+					<input type="text" class="form-control" id="proj_custom_phone" value="">
+				</div>
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons" style="margin-top:15px">
+			<div class="col-md-12">
+				<button id="do_save_sys_proj" data-style="zoom-in" class="ladda-button btn btn-primary" style="width:100%">保存</button>
+			</div>
+		</div>
+	</div>
+	
+	<div id="templatemo-preferences-form-proj-domain" style="display:none;padding-left:15px;padding-right:15px; margin-bottom: 30px; max-width: 960px;">
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="proj_domain" class="control-label">域名</label>
+				<input type="text" class="form-control" id="proj_domain" placeholder="请设置项目访问域名，例如:baidu.com">
+			</div>
+		</div>
+		
+		<div class="row templatemo-form-buttons">
+			<div class="col-md-12">
+				<button id="submit_proj_domain" class="btn btn-primary">确认</button>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-md-12 col-sm-12" id="check_box_list" style="display:none">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist" id="templatemo-tabs">
+			<li class="active"><a href="#home" role="tab" data-toggle="tab">加载中</a></li>
+		</ul>
+		<!-- Tab panes -->
+		<div class="tab-content">
+		</div>
+		<!-- tab-content -->
+	</div>
+
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	
+	<!-- Ladda -->
+    <script th:src="|${pub_bucket}/js/plugins/ladda/spin.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.jquery.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/jeditable/jquery.jeditable.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/dataTables/datatables.min.js|"></script>
+    
+    <script th:src="|${pub_bucket}/js/plugins/sweetalert/sweetalert.min.js|"></script>
+
+	<script>
+		$(document).ready(function() {
+
+			$('#loading-example-btn').click(function() {
+				btn = $(this);
+				simpleLoad(btn, true)
+
+				// Ajax example
+				//                $.ajax().always(function () {
+				//                    simpleLoad($(this), false)
+				//                });
+
+				simpleLoad(btn, false)
+			});
+		});
+
+		function simpleLoad(btn, state) {
+			if (state) {
+				btn.children().addClass('fa-spin');
+				btn.contents().last().replaceWith(" Loading");
+			} else {
+				setTimeout(function() {
+					btn.children().removeClass('fa-spin');
+					btn.contents().last().replaceWith(" Refresh");
+				}, 2000);
+			}
+		}
+	</script>
+</body>
+
+<script type="text/javascript">
+$(function() {
+	var p_id = 0;
+	var l = $(".ladda-button").ladda();
+	
+	$(".edit").on("click", function() {
+		$.get('/project/project/aj/view?id=' + $(this).attr("attr_id"), {}, function(data) {
+			if(data.available) {
+				p_id = data.data.id;
+				$("#proj_name").val(data.data.proj_name);
+				$("#proj_key").val(data.data.proj_key);
+				$("#proj_custom_phone").val(data.data.custom_phone);
+				$("#proj_info").val(data.data.info);
+				$("#proj_brief").val(data.data.brief);
+				$("#proj_status").val(data.data.proj_status);
+				layer.open({
+					area : [ '60%', '80%'],
+					type : 1,
+					content : $("#templatemo-preferences-form")
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = "操作失败：" + code;
+				layer.msg(msg, {shift : 6});
+			}
+		});
+	});
+	
+	$(".add_new_sys_project").on("click", function(){
+		//初始化图片上传的输入框
+		$("#result").html("");
+		$("#proj_logo").val("");
+		p_id = 0;
+		choose_p_proj_type = "-1";
+		$("#proj_name").val("");
+		$("#proj_key").val("");
+		$("#proj_custom_phone").val("");
+		$("#proj_info").val("");
+		$("#proj_brief").val("");
+		//获取商户列表
+		var url = "/project/project/aj/get_my_merchants/?" + Date.parse(new Date());
+		var index = layer.load();
+		$.get(url, {}, function(data){
+			layer.close(index);
+			if(data.available) {
+				var ret_obj = data.data;
+				var html = "<option value=-1>选择商户</option>";
+				for(var i=0; i<ret_obj.length; i++) {
+					var tmp_obj = ret_obj[i];
+					html = html + "<option value=" + tmp_obj.id + ">" + tmp_obj.name + "</option>";
+				}
+				$("#proj_merch").html(html);
+				layer.open({
+					area : [ '60%', '80%'],
+					type : 1,
+					content : $("#templatemo-preferences-form")
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = "操作失败：" + code;
+				layer.msg(msg, {shift : 6});
+			}
+		});
+	});
+	//图片预览
+	 function ProcessFile(e) {
+	    var file = document.getElementById('proj_logo').files[0];
+	    if (file) {
+	        var reader = new FileReader();
+	        reader.onload = function (event) {
+	        var txt = event.target.result;
+	        var img = document.createElement("img");
+	        img.id="imgSize";
+	        img.style="width:100px;height:100px;";
+	        img.src = txt;//将图片base64字符串赋值给img的src
+	        document.getElementById("result").appendChild(img);
+	       };
+	    }
+	       reader.readAsDataURL(file);
+	 }
+	  function contentLoaded() {
+	   document.getElementById('proj_logo').addEventListener('change',
+	     ProcessFile, false);
+	  }
+	 window.addEventListener("DOMContentLoaded", contentLoaded, false); 
+	    
+	$("#do_save_sys_proj").on("click", function() {
+		var name = $.trim($("#proj_name").val());
+		var key = $.trim($("#proj_key").val());
+		var phone = $.trim($("#proj_custom_phone").val());
+		var info = $.trim($("#proj_info").val());
+		var brief = $.trim($("#proj_brief").val());
+		var proj_status = $("#proj_status").val();
+		//参数校验
+		if(name==null||name==''){
+			var msg='项目名称不能为空';
+			layer.msg(msg, {icon: 2});
+			return;
+		}
+		if(phone){
+	      if(!(/^1(3|4|5|7|8)\d{9}$/.test(phone))){ 
+			var msg='手机号码有误，请重填';
+			layer.msg(msg, {icon: 2});
+			return; 
+		  } 
+		}
+		var formData = new FormData();
+        formData.append("proj_logo", document.getElementById("proj_logo").files[0]);
+        formData.append('name', name);
+        formData.append('key', key);
+        formData.append('phone', phone);
+        formData.append('info', info);
+        formData.append('brief', brief);
+        formData.append('status', proj_status);
+        formData.append('id', p_id);
+        var $this = $(this);
+		$this.ladda('start');
+        $.ajax({
+            url: '/project/project/aj/save',
+            type: "POST",
+            data: formData,
+            datatype:"json",
+            contentType: false,
+            processData: false,
+            traditional: true,
+            success: function (data) {
+           		$this.ladda('stop');
+           		layer.closeAll();
+           		if(data.available) {
+    				swal({title: "Good job!", text: "操作成功", type: "success"}, function() {
+    					location.reload();
+    				});
+    			} else {
+    				var code = data.messages[0];
+    				var msg = '操作失败：' + code;
+    				layer.msg(msg, {icon: 2});
+    			}
+            },
+            error: function () {
+           		layer.closeAll();
+           		$this.ladda('stop');
+           		swal({title: "Error", text: "操作失败", type: "error"});
+            }
+        });
+        
+	});
+	
+	$(".do_set_proj_domain").on("click", function(){
+		p_id = $(this).attr("attr_id");
+		var url = "/project/project/aj/view_domain/?" + Date.parse(new Date());
+		var index = layer.load(0, {shade: false});
+		$.get(url, {p_id:p_id}, function(data){
+			layer.close(index);
+			if(data.available) {
+				var proj_domain = data.data;
+				$("#proj_domain").val(proj_domain);
+				
+				layer.open({
+					area : [ '300px', '200px' ],
+					type : 1,
+					content : $("#templatemo-preferences-form-proj-domain")
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = "操作失败：" + code;
+				layer.msg(msg, {icon: 2});
+			}
+		});
+	});
+	
+	$("#submit_proj_domain").on("click", function(){
+		var proj_domain = $.trim($("#proj_domain").val());
+		if(p_id<=0) {
+			layer.msg("请选择要设置域名的项目", {icon: 2});
+			return;
+		}
+		//域名校验
+		if(proj_domain){
+		  var p_domain=/([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}/
+		  if(!(p_domain.test(proj_domain))){
+			 layer.msg("输入的域名不符合规则", {icon: 2});
+			 return;
+		  }
+		}
+		if(proj_domain==null||proj_domain==''){
+			layer.msg("域名不能为空", {icon: 2});
+			return;
+		}
+		var url = "/project/project/aj/set_domain/?" + Date.parse(new Date());
+		var index = layer.load(0, {shade: false});
+		$.get(url, {id:p_id,domain:proj_domain}, function(data){
+			layer.close(index);
+			if(data.available) {
+				layer.alert('操作成功', {
+			        skin: 'layui-layer-lan',
+			        shift: 4 //动画类型
+			    }, function(){
+			    	location.reload();
+			    });
+			} else {
+				var code = data.messages[0];
+				var msg = data.messages[0];
+				if(code=="object_belong_error") {
+					msg = "您无权修改该项目域名";
+				} else if(code=="object_repeat") {
+					msg = "域名重复，请确认您的输入或联系您的客户经理";
+				}
+				layer.msg(msg, {icon: 2});
+			}
+		});
+	});
+	
+	$(".func_config").on("click", function(){
+		//获取商户id
+		var r_id = $(this).attr("attr_id");
+		var index = layer.load();
+		var url = "/project/project/aj/choose_modules/?" + Date.parse(new Date());
+		$.get(url, {p_id:r_id}, function(data){
+			layer.close(index);
+			if(data.available) {
+				var html = "";
+				if(data.data==null||data.data.length==0) {
+					html = "<li class=\"active\"><a href=\"#home\" role=\"tab\" data-toggle=\"tab\">未设置系统模块</a></li>";
+					$("#templatemo-tabs").html(html);
+					return;
+				}
+				for(var i=0; i<data.data.length; i++) {
+					var tmp_obj = data.data[i];
+					var class_name = "module_name";
+					if(i==0) {
+						class_name = class_name + " active";
+					}
+					if(html=="") {
+						html = "<li attr_m_id=\"" + tmp_obj.id + "\" class=\"" + class_name + "\"><a href=\"#func_" + tmp_obj.id + "\" role=\"tab\" data-toggle=\"tab\">" + tmp_obj.func_name + "</a></li>";
+					} else {
+						html = html + "<li attr_m_id=\"" + tmp_obj.id + "\" class=\"" + class_name + "\"><a href=\"#func_" + tmp_obj.id + "\" role=\"tab\" data-toggle=\"tab\">" + tmp_obj.func_name + "</a></li>";
+					}
+				}
+				$("#templatemo-tabs").html(html);
+				
+				$(".module_name").on("click", function(){
+					var m_id = $(this).attr("attr_m_id");
+					var url = "/project/project/aj/choose_mod_funcs/?" + Date.parse(new Date());
+					var index = layer.load();
+					$.get(url, {mod_id:m_id,p_id:r_id}, function(data){
+						layer.close(index);
+						if(data.available) {
+							var html = "<div class=\"tab-pane fade in active\" id=\func_" + m_id + "\">";
+							html = html + "<ul class=\"list-group\">";
+							for(var i=0; i<data.data.length; i++) {
+								var tmp_obj = data.data[i];
+								html = html + "<li class=\"list-group-item\">";
+								html = html + "<input type=\"checkbox\" value=\"" + tmp_obj.id + "\" class=\"choose_role_checkbox\"";
+								if(tmp_obj.flag==1) {
+									html = html + " checked=\"true\" ";
+								}
+								html = html + "/> " + tmp_obj.func_name;
+								
+								var inner_html = "";
+								if(tmp_obj.hasson==true) {
+									//加载子项
+									$.ajax({
+										url:url,
+										type:'get',
+										async:false,
+										data:{mod_id:tmp_obj.id,proj_id:r_id},
+										success:function(r_data) {
+											inner_html = inner_html + "<ul class='list-group'>";
+											for(var j=0; j<r_data.obj.length; j++) {
+												var j_tmp_obj = r_data.obj[j];
+												inner_html = inner_html + "<li class=\"list-group-item\">";
+												inner_html = inner_html + "<input type=\"checkbox\" value=\"" + j_tmp_obj.id + "\" class=\"choose_role_checkbox\"";
+												if(j_tmp_obj.flag==1) {
+													inner_html = inner_html + " checked=\"true\" ";
+												}
+												inner_html = inner_html + "/> " + j_tmp_obj.func_name;
+												inner_html = inner_html + "</li>";
+											}
+											inner_html = inner_html + "</ul>";
+										}
+									});
+								}
+								
+								html = html + inner_html + "</li>";
+							}
+							html = html + "</ul>";
+							html = html + "</div>";
+							$(".tab-content").html(html);
+							
+							$(".choose_role_checkbox").on("click", function(){
+								var obj = this;
+								var click_id = $(this).val();
+								var is_checked = $(this).attr("checked");
+								
+								var url = "/project/project/aj/set_r_func/?" + Date.parse(new Date());
+								var add_func = 1;
+								if(is_checked=="checked") {
+									$(this).removeAttr("checked");
+									add_func = 0;
+								} else {
+									$(this).attr("checked", "true");
+								}
+								var index = layer.load();
+								$.get(url, {proj_id:r_id,f_id:click_id,type:add_func}, function(data){
+									layer.close(index);
+									if(data.available) {
+										layer.msg('操作成功', {icon: 1});
+									} else {
+										var code = data.messages[0];
+										var msg = "未知错误";
+										if(code=="input_param_error") {
+											msg = "输入参数错误";
+										} else if(code=="common_object_not_found") {
+											msg = "功能不存在或已经被删除";
+										} else if(code=="func_out_range") {
+											msg = "此模块不可赋予目标项目";
+										}
+										layer.msg(msg, {icon: 2});
+										$(obj).removeAttr("checked");
+									}
+								});
+							});
+						} else {
+							var code = data.messages[0];
+							var msg = "子模块不存在：" + code;
+							layer.msg(msg, { shift : 6});
+						}
+					});
+				});
+				
+				$(".module_name").each(function(){
+					if($(this).hasClass("active")) {
+						$(this).trigger("click");
+					}
+				});
+				
+				layer.open({
+					area : ['100%', '100%'],
+					type : 1,
+					content : $("#check_box_list")
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = "模块加载失败：" + code;
+				layer.msg(msg, {shift: 6});
+			}
+		});
+	});
+	
+	$(".wx_config").on("click", function(){
+		var url = "/project/project/config/front/?p_id=" + $(this).attr("attr_id") + "&" + Date.parse(new Date());
+		location.href = url;
+	});
+	
+	$(".pay_config").on("click", function() {
+		var p_id = $(this).attr("attr_id");
+		var url = "/project/project/config/general/?p_id=" + p_id + "&" + Date.parse(new Date());
+		location.href = url;
+	});
+});
+</script>
+
+</html>

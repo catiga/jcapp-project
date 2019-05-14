@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<!-- BEGIN HEAD -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> | 桌面 - [[${now_proj.proj_name}]]</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="" name="description">
+<meta content="" name="author">
+<link th:href="|${pub_bucket}/css/metro/bootstrap.min.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/metro/bootstrap-responsive.min.css|" rel="stylesheet">
+
+<link th:href="|${pub_bucket}/css/metro/font-awesome.css|" rel="stylesheet">
+
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+
+<link th:href="|${pub_bucket}/css/metro/style.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/metro/style-responsive.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/metro/style-default.css|" rel="stylesheet" id="style_color">
+
+<script type="text/javascript">
+function on_redirect(obj) {
+	location.href = obj.href + '?' + new Date().getTime();
+}
+</script>
+
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="lock">
+	<div class="lock-header">
+		<!-- BEGIN LOGO -->
+		<a class="center" id="logo" href="###"> 
+			<img th:if="${now_proj.logo==null}" class="center" alt="logo" th:src="|${pub_bucket}/css/metro/logo.png|" style="width:60px;height:40px;">
+			<img th:if="${now_proj.logo!=null}" class="center" alt="logo" th:src="|http://pe1s.static.pdr365.com/${now_proj.logo}|" style="width:60px;height:40px;">
+		</a>
+		<!-- END LOGO -->
+	</div>
+	<div class="login-wrap">
+		<div th:each="sa,saStat:${sys_apps}" th:if="${sa.appName!='H5公众号'&&sa.appName!='收银台'&&sa.appName!='后厨'}" th:class="${sa.describe}" th:classappend="${saStat.index%2==0?'single-size metro':'double-size metro'}" >
+			<div class="locked">
+				<a th:href="|/${sa.appCode}/welcome|" class="social-link" onclick="on_redirect(this); return false;">
+					<i class="fa fa-ils"></i> 
+					<span>[[${sa.appName}]]</span>
+				</a>
+			</div>
+		</div>
+	
+	
+		<!-- 
+		<div class="metro single-size red">
+			<div class="locked">
+				<a href="/project/project/list" class="social-link" onclick="on_redirect(this); return false;">
+					<i class="fa fa-ils"></i> <span>系统管理</span>
+				</a>
+			</div>
+		</div>
+		<div class="metro double-size green">
+			<a href="/trade/mgr/index" class="social-link" onclick="on_redirect(this); return false;"> 
+				<i class="fa fa-bitbucket"></i> 
+				<span>交易管理</span>
+			</a>
+		</div>
+		<div class="metro double-size yellow">
+			<a href="/market/index" class="social-link" onclick="on_redirect(this); return false;"> 
+				<i class="fa fa-support"></i> 
+				<span>运营支持</span>
+			</a>
+		</div>
+		<div class="metro single-size terques login">
+			<div class="locked">
+				<a href="/report/index" class="social-link">
+					<i class="fa fa-money"></i> <span>报表系统</span>
+				</a>
+			</div>
+		</div>
+		
+		
+		<div class="metro double-size navy-blue ">
+			<a href="/scm/goods/index" class="social-link" onclick="on_redirect(this); return false;"> 
+				<i class="fa fa-shopping-cart"></i> 
+				<span>商品与库存</span>
+			</a>
+		</div>
+		<div class="metro single-size deep-red">
+			<a href="/ticketingsys/system/list" class="social-link" onclick="on_redirect(this); return false;"> 
+				<i class="fa fa-ticket"></i> 
+				<span>票务管理</span>
+			</a>
+		</div>
+		<div class="metro double-size blue">
+			<a href="/crm/index" class="social-link" onclick="on_redirect(this); return false;"> 
+				<i class="fa fa-users"></i> 
+				<span>会员管理</span>
+			</a>
+		</div>
+		<div class="metro single-size purple">
+            <a href="/whichturn/checkin/list" class="social-link" onclick="on_redirect(this); return false;"> 
+                <i class="fa fa-rocket"></i> 
+                <span>班次管理</span>
+            </a>
+        </div>
+         -->
+         
+		<div class="login-footer">
+			<div class="remember-hint pull-left">
+				欢迎您：[[${token.user.username}]] 
+			</div>
+			<div class="forgot-hint pull-right">
+				<a  id="forget-password"  class="" href="/project/index/index" onclick="on_redirect(this); return false;">切换用户</a>
+			</div>
+		</div>
+	</div>
+
+	<!-- END BODY -->
+</body>
+</html>

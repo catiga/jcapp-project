@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 组织架构</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+
+<link rel="stylesheet" th:href="@{{sp}/third/orgchart/css/font-awesome.min.css(sp=${pub_bucket})}">
+<link rel="stylesheet" th:href="@{{sp}/third/orgchart/css/jquery.orgchart.css(sp=${pub_bucket})}">
+<link rel="stylesheet" th:href="@{{sp}/third/orgchart/css/style.css(sp=${pub_bucket})}">
+
+<!-- Sweet Alert -->
+<link th:href="@{{sp}/css/plugins/sweetalert/sweetalert.css(sp=${pub_bucket})}" rel="stylesheet">
+
+<style type="text/css">
+#chart-container { height: 600px; border: 2px solid #aaa; }
+.orgchart { background: #fff; }
+.orgchart td.left, .orgchart td.right, .orgchart td.top { border-color: #aaa; }
+.orgchart td>.down { background-color: #aaa; }
+.orgchart .middle-level .title { background-color: #006699; }
+.orgchart .middle-level .content { border-color: #006699; }
+.orgchart .product-dept .title { background-color: #009933; }
+.orgchart .product-dept .content { border-color: #009933; }
+.orgchart .rd-dept .title { background-color: #993366; }
+.orgchart .rd-dept .content { border-color: #993366; }
+.orgchart .pipeline1 .title { background-color: #996633; }
+.orgchart .pipeline1 .content { border-color: #996633; }
+.orgchart .frontend1 .title { background-color: #cc0066; }
+.orgchart .frontend1 .content { border-color: #cc0066; }
+.orgchart .edit_info {
+	transition: opacity .5s;
+	opacity: 0;
+	right: -5px;
+	top: -5px;
+	z-index: 2;
+	color: rgba(68, 157, 68, 0.5);
+	font-size: 18px;
+	position: absolute;
+}
+.orgchart .add_person {
+	transition: opacity .5s;
+	opacity: 0;
+	right: -5px;
+	top: 35px;
+	z-index: 2;
+	color: rgba(68, 157, 68, 0.5);
+	font-size: 18px;
+	position: absolute;
+}
+.orgchart .remove_node {
+	transition: opacity .5s;
+	opacity: 0;
+	right: 115px;
+	top: 35px;
+	z-index: 2;
+	color: rgba(68, 157, 68, 0.5);
+	font-size: 18px;
+	position: absolute;
+}
+.orgchart .edit_info:hover { color: #449d44; }
+.orgchart .node:hover .edit_info { opacity: 1; }
+.orgchart .add_person:hover { color: #449d44; }
+.orgchart .node:hover .add_person { opacity: 1; }
+.orgchart .remove_node:hover { color: #449d44; }
+.orgchart .node:hover .remove_node { opacity: 1; }
+</style>
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../common/top"></div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="wrapper wrapper-content animated fadeInUp">
+
+						<div class="ibox">
+							<div class="ibox-content">
+								<div class="row m-b-sm m-t-sm">
+									<div class="col-sm-9 m-b-xs">
+										<button type="button" id="loading-example-btn" class="btn btn-white btn-sm">
+											<i class="fa fa-refresh"></i> Refresh
+										</button>
+									</div>
+									<div class="col-sm-3">
+										<div class="ibox-tools">
+											<a href="javascript:void(0)" class="btn btn-primary btn-xs new_obj">添加部门</a>
+										</div>
+									</div>
+								</div>
+								<div id="chart-container"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="../common/foot"></div>
+		</div>
+	</div>
+	
+	<div id="templatemo-preferences-form" style="display:none;padding-left:15px;padding-right:15px">
+		<div class="row">
+			<div class="col-md-6 margin-bottom-15">
+				<label for="core_name" class="control-label">名称</label>
+				<input type="text" class="form-control" id="core_name" value="">
+			</div>
+			<div class="col-md-6 margin-bottom-15">
+				<label for="core_code" class="control-label">编号</label>
+				<input type="text" class="form-control" id="core_code" value="">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="core_type">类型</label> 
+				<select name="core_type" class="form-control margin-bottom-15" id="core_type">
+					<option value="-1">请选择</option>
+					<option value="0" disabled>机构</option>
+					<option value="1">部门</option>
+					<option value="2">岗位</option>
+				</select>
+			</div>
+			<div class="col-md-6 margin-bottom-15 hide">
+				<label for="core_op">操作</label> 
+				<select name="core_op" class="form-control margin-bottom-15" id="core_op">
+					<option value="1">编辑信息</option>
+					<option value="2">创建子信息</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="core_info" class="control-label">信息</label>
+				<input type="text" class="form-control" id="core_info" value="" placeholder="">
+			</div>
+		</div>
+		
+		<div class="row templatemo-form-buttons" style="margin-top:15px">
+			<div class="col-md-12">
+				<input type="hidden" id="core_id" val="-1"/>
+				<button id="update_info" class="btn btn-primary" style="width:100%">保存</button>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-md-12 col-sm-12" id="check_box_user_list" style="display:none">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist" id="templatemo-tabs">
+			<li class="active"><a href="#home" role="tab" data-toggle="tab">部门／岗位用户</a></li>
+		</ul>
+
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<div class="tab-pane fade in active" id="home">
+				<ul class="list-group" id="user_list">
+					<li class="list-group-item">
+					<input class="choose_role_checkbox" type="checkbox" value="1" name="role_item">
+					超级管理员
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- tab-content -->
+	</div>
+	
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	
+	<script th:src="@{{sp}/third/plupload/plupload.full.min.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	<script th:src="@{{sp}/third/qiniu/qiniu_https.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	
+	<script type="text/javascript" th:src="|${pub_bucket}/third/orgchart/js/jquery.orgchart.js|"></script>
+	<script type="text/javascript" th:src="|${pub_bucket}/third/orgchart/js/jquery.mockjax.min.js|"></script>
+	<!-- Sweet alert -->
+    <script th:src="|${pub_bucket}/js/plugins/sweetalert/sweetalert.min.js|"></script>
+</body>
+
+<script>
+$(document).ready(function() {
+	var ajaxURLs = {
+   		'children': function(nodeData) {
+        	return '/project/org/aj/root?id=' + nodeData.id;
+		},
+		'families': function(nodeData) {
+			return '/project/org/aj/root?id=' + nodeData.id;
+		},
+		'parent': '/orgchart/parent/',
+		'siblings': function(nodeData) {
+			return '/project/org/aj/root?id=' + nodeData.id;
+		}
+    };
+	
+	var load_user = function(id) {
+		var url = "/project/org/aj/load_user/?" + new Date().getTime();
+		var index = layer.load();
+		$.get(url, {dept:id}, function(data){
+			layer.close(index);
+			if(data.available&&data.data!=null) {
+				var html = "";
+				for(var i=0; i<data.data.length; i++) {
+					var tmp_obj = data.data[i];
+					html = html + "<li class=\"list-group-item\">";
+					html = html + "<input type=\"checkbox\" value=\"" + tmp_obj.id + "\" class=\"switch_dept_user\"";
+					if(tmp_obj.flag==1) {
+						html = html + " checked=\"true\" ";
+					}
+					html = html + "/> " + tmp_obj.username;
+				}
+				$("#user_list").html(html);
+				$(".switch_dept_user").on("click", function(data){
+					var u_id = $(this).val();
+					var bind_user_url = "/project/org/aj/bind_user/?" + new Date().getTime();
+					var new_index = layer.load();
+					$.get(bind_user_url, {deptid:id,uid:u_id}, function(data){
+						layer.close(new_index);
+						if(data.available) {
+							layer.msg('操作成功', {icon: 1});
+						} else {
+							var code = data.messages[0];
+							var msg = "操作失败：" + code;
+							if(data.messages.length>1) {
+								msg = msg + data.messages[1];
+							}
+							layer.msg(msg, {shift: 6});
+						}
+					});
+				});
+				layer.open({
+					area : ['70%', '80%'],
+					type : 1,
+					content : $("#check_box_user_list")
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = "操作失败：" + code;
+				layer.msg(msg, {shift: 6});
+			}
+		});
+	};
+	var remove_node = function(id, type) {
+		if(type==0) {
+			swal({
+                title: "提示!",
+                text: "不允许删除根节点!",
+                type: "error"
+            });
+        	return;
+		}
+		swal({
+	        title: "确认删除节点吗?",
+	        type: "warning",
+	        showCancelButton: true,
+	        confirmButtonColor: "#DD6B55",
+	        confirmButtonText: "确定",
+	        closeOnConfirm: true
+	    }, function () {
+	    	var index = layer.load();
+	    	$.get('/project/org/aj/remove?' + new Date().getTime(), {id:id}, function(data) {
+	    		layer.close(index);
+	    		if(data.available) {
+	    			swal({title: "Good job!", text: "操作成功", type: "success"}, function() {
+						location.reload();
+					});
+	    		} else {
+	    			var code = data.messages[0];
+					if(data.messages.length>1) {
+						code = data.messages[1] + "，" + code; 
+					}
+					var msg = "操作失败：" + code;
+					layer.msg(msg, {shift: 6});
+	    		}
+	    	});
+	    });
+	}
+	$('#loading-example-btn').on("click", function() {
+		btn = $(this);
+		simpleLoad(btn, true)
+
+		var datasource = {};
+	    $.get('/project/org/aj/root?' + new Date().getTime(), {}, function(data) {
+	    	datasource = data;
+	    	$('#chart-container').html('');
+		    var oc = $('#chart-container').orgchart({
+				'data' : datasource,
+				'chartClass': 'edit-state',
+				'ajaxURL': ajaxURLs,
+				'nodeContent': 'title',
+				'nodeId': 'id',
+				'createNode': function($node, data) {
+				    $node.attr('type', data.type);
+				    $node.attr('code', data.code);
+				    var edit_info = $('<i>', {
+						'class': 'fa fa-edit edit_info',
+						click: function() {
+							var $this = $(this).parent();
+							var name = $this.find('.title').text();
+							var content = $this.find('.content').text();
+							var id = $this.attr("id");
+							var type = $this.attr("type");
+							var code = $this.attr("code");
+					        if(type==0) {
+					        	swal({
+				                    title: "提示!",
+				                    text: "不允许编辑根节点!",
+				                    type: "error"
+				                });
+					        	return;
+					        }
+					        $("#core_name").val(name);
+					        $("#core_type").val(type);
+					        $("#core_info").val(content);
+					        $("#core_id").val(id);
+					        $("#core_code").val(code)
+					        $("#core_op").val(1);
+							layer.open({
+								area : [ '40%', '60%'],
+								type : 1,
+								title:"编辑信息",
+								content : $("#templatemo-preferences-form")
+							});
+						}
+					});
+				    var add_person = $('<i>', {
+						'class': 'fa fa-user add_person',
+						click: function() {
+							var $this = $(this).parent();
+							var deptid = $this.attr("id");
+							load_user(deptid);
+						}
+					});
+				    var del_obj = $('<i>', {
+						'class': 'fa fa-times remove_node',
+						click: function() {
+							var $this = $(this).parent();
+							var deptid = $this.attr("id");
+							var type = $this.attr('type');
+							remove_node(deptid, type);
+						}
+					});
+					$node.append(edit_info);$node.append(add_person);$node.append(del_obj);
+				}
+		    });
+		    
+		    simpleLoad(btn, false)
+	    });
+	});
+	$('#loading-example-btn').trigger("click");
+});
+
+function simpleLoad(btn, state) {
+	if (state) {
+		btn.children().addClass('fa-spin');
+		btn.contents().last().replaceWith(" Loading");
+	} else {
+		setTimeout(function() {
+			btn.children().removeClass('fa-spin');
+			btn.contents().last().replaceWith(" Refresh");
+		}, 2000);
+	}
+}
+</script>
+
+<script type="text/javascript" th:inline="javascript">
+$(function() {
+	var core_id = -1;
+	$("#update_info").on("click", function() {
+		var core_id = $("#core_id").val();
+		var core_name = $.trim($("#core_name").val());
+		var core_info = $.trim($("#core_info").val());
+		var core_type = $("#core_type").val();
+		var core_code = $.trim($("#core_code").val());
+		var core_op = $("#core_op").val();
+		var params = {
+			id:core_id,
+			name:core_name,
+			info:core_info,
+			type:core_type,
+			code:core_code,
+			op:core_op
+		};
+		$.post('/project/org/aj/update', {id:core_id,name:core_name,info:core_info,type:core_type,code:core_code,op:core_op}, function(data) {
+			if(data.available) {
+				layer.alert('操作成功', {icon: 6}, function() {
+					layer.closeAll();
+					$("#loading-example-btn").trigger("click");
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = '操作失败：' + code;
+				if(data.messages.length>1) {
+					msg = '操作失败：' + data.messages[1] + code;
+				}
+				layer.msg(msg, {icon: 2});
+			}
+		});
+	});
+	$(".new_obj").on("click", function() {
+		$("#core_name").val('');
+        $("#core_type").val(-1);
+        $("#core_info").val('');
+        $("#core_id").val(-1);
+        $("#core_code").val('');
+        $("#core_op").val(2);
+        let selectedNode = $(".node.focused").attr("id");
+        let selectedNodeType = $(".node.focused").attr("type");
+        if(selectedNode&&selectedNodeType>0) {
+        	$("#core_id").val(selectedNode);
+        }
+		layer.open({
+			area : [ '40%', '60%'],
+			type : 1,
+			title:"添加部门",
+			content : $("#templatemo-preferences-form")
+		});
+	});
+});
+</script>
+
+</html>

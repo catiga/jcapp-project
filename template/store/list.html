@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 门店管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/sweetalert/sweetalert.css|" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/select2/select2.min.css|" rel="stylesheet">
+
+<link th:href="|${pub_bucket}/css/plugins/ladda/ladda-themeless.min.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/sweetalert/sweetalert.css|" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-sm-4">
+					<h2>门店管理</h2>
+					<ol class="breadcrumb">
+						<li><a href="javascript:;">Home</a></li>
+						<li class="active"><strong>门店列表</strong></li>
+					</ol>
+				</div>
+			</div>
+			
+			<div class="wrapper wrapper-content animated fadeInRight ecommerce" style="padding-bottom:0px;">
+				<div class="ibox-content m-b-sm border-bottom">
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label class="control-label" for="ware_house">省份区域</label>
+								<select name="select_province" id="select_province" class="form-control select_province">
+									<option></option>
+									<option th:each="w:${provinces}" th:code="${w.city_no}" th:selected="${select_province==w.city_no}" th:value="${w.id}" th:text="${w.city_name}"></option>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label class="control-label" for="store_num">门店编号</label>
+								<div class="input-group">
+									<input type="text" id="store_num" name="store_num" placeholder="输入门店编号" class="input-sm form-control" th:value="${store_num}"> 
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-sm btn-primary do_query"> 查询</button>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="wrapper wrapper-content animated fadeInUp">
+
+						<div class="ibox">
+							<div class="ibox-title">
+								<h5>门店信息</h5>
+								<div class="ibox-tools">
+									<a href="javascript:void(0)" class="btn btn-primary btn-xs new_store">添加门店</a>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<div class="row m-b-sm m-t-sm hide">
+									<div class="col-sm-9 m-b-xs">
+										<button type="button" id="loading-example-btn" class="btn btn-white btn-sm">
+											<i class="fa fa-refresh"></i> Refresh
+										</button>
+									</div>
+									<div class="col-sm-3">
+										<div class="input-group">
+											<input type="text" placeholder="Search"
+												class="input-sm form-control"> <span
+												class="input-group-btn">
+												<button type="button" class="btn btn-sm btn-primary"> Go!</button>
+											</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="table-responsive">
+                                	<table class="table table-striped">
+										<thead>
+		                                    <tr>
+		                                    	<th>LOGO</th>
+												<th>编号</th>
+												<th>名称</th>
+												<th>所在区域</th>
+												<th>详细地址</th>
+												<th>联系电话</th>
+												<th>门店标签</th>
+	  											<th>操作</th>
+	  											<th>Action</th>
+		                                    </tr>
+	                                    </thead>
+										<tbody>
+											<tr th:each="st:${page.result}" th:attr_id="${st.id }">
+												<td>
+													<a href="javascript:;">
+														<img th:if="${st.store_logo!=null}" alt="image" class="img-circle" th:src="|http://pe1s.static.pdr365.com/${st.store_logo}|" width="38px" height="38px">
+														<img th:if="${st.store_logo==null}" alt="image" class="img-circle" th:src="@{{sp}/img/a3.jpg(sp=${pub_bucket})}" width="38" height="38">
+													</a>
+												</td>
+												<td>[[${st.store_no }]]</td>
+												<td>
+													<a href="javascript:;">[[${st.store_name }]]</a><br/> 
+													<small>更新时间 [[${#dates.format(st.c_time, 'yyyy-MM-dd')}]]</small>
+												</td>
+												<td>[[${st.province }]][[${st.city }]][[${st.zone }]]</td>
+												<td>[[${st.address }]]</td>
+												<td>[[${st.phone }]]</td>
+												<td>[<a data-toggle="modal" href="#modal-form-tag" class='mg_tag' th:attr_id="${st.id}">标签管理</a>]</td>
+												<td>
+													<button class="btn btn-white btn-sm edit" th:attr_id="${st.id }"><i class="fa fa-pencil"></i> 编辑 </button>
+													<button class="btn btn-info btn-sm hide" type="button" th:attr_id="${proj.id }"><i class="fa fa-paste"></i> 店员</button>
+												</td>
+												<td>
+													<button data-toggle="modal" href="#modal-form" class="btn btn-info btn-sm bind_proj" type="button" th:attr_id="${st.id }" th:if="${st.proj_id==null}">
+														<i class="fa fa-paste"></i> 设置归属项目
+													</button>
+													<button class="btn btn-warning btn-sm bind_tips" type="button" th:attr_id="${st.id }" th:if="${st.proj_id!=null}">
+														<span th:each="p:${all_proj}" th:if="${p.id==st.proj_id}"><i class="fa fa-institution"></i> [[${p.proj_name}]]</span>
+													</button>
+													
+													<div class="btn-group hide">
+							                            <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle">Action <span class="caret"></span></button>
+							                            <ul class="dropdown-menu">
+							                                <li><a data-toggle="modal" href="#modal-form" class="bind_proj" th:attr_id="${st.id}">关联项目</a></li>
+							                            </ul>
+							                        </div>
+						                        </td>
+											</tr>
+										</tbody>
+									</table>
+
+									<div th:replace="../common/page"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="../common/foot"></div>
+		</div>
+	</div>
+	
+	
+	<div id="templatemo-preferences-form" style="display:none;padding-left:15px;padding-right:15px">
+		<div class="row">
+			<div class="col-md-6 margin-bottom-15">
+				<label class="control-label" for="store_no">门店编号</label> 
+				<input type="text" class="form-control" id="store_no" placeholder="请输入门店编号">
+			</div>
+			<div class="col-md-6 margin-bottom-15">
+				<label for="store_name" class="control-label">门店名称</label>
+				<input type="text" class="form-control" id="store_name" placeholder="请输入门店名称">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4 margin-bottom-15">
+				<label for="province" class="control-label">所在省</label>
+				<select class="ipt_select1 form-control margin-bottom-15" name="province" id="province">
+					<option value="请选择">请选择</option>
+				</select>
+			</div>
+			<div class="col-md-4 margin-bottom-15">
+				<label for="city" class="control-label">所在市</label>
+				<select class="ipt_select1 form-control margin-bottom-15" name="city" id="city">
+					<option value="请选择">请选择</option>
+				</select>
+			</div>
+			<div class="col-md-4 margin-bottom-15">
+				<label for="zone" class="control-label">所在区</label>
+				<select class="ipt_select1 form-control margin-bottom-15" name="zone" id="zone">
+					<option value="请选择">请选择</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="store_address" class="control-label">详细地址</label>
+				<input type="text" class="form-control" id="store_address" placeholder="请输入店铺地址">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 margin-bottom-15">
+				<label for="store_phone" class="control-label">联系电话</label>
+				<input type="text" class="form-control" id="store_phone" placeholder="请输入店铺联系电话">
+			</div>
+			<div class="col-md-6 margin-bottom-15">
+				<label for="store_info" class="control-label">店铺信息</label>
+				<input type="text" class="form-control" id="store_info" placeholder="请输入店铺信息">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="store_logo" class="control-label">店铺LOGO</label>
+				<input type="file" class="form-control" id="store_logo">
+			</div>
+		</div>
+		
+		<div class="row templatemo-form-buttons" style="margin-top:15px;">
+			<div class="col-md-12">
+				<button data-style="zoom-in" class="ladda-button btn btn-primary save_store" style="width:100%">保存</button>
+			</div>
+		</div>
+	</div>
+	
+	<div id="tag_op_form" style="display:none;padding-left:15px;padding-right:15px">
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label class="control-label" for="tag_set">标签管理（空格分隔）</label>
+				<input type="hidden" class="form-control" id="tag_sid">
+				<input type="text" class="form-control" id="tags" placeholder="设置标签">
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons" style="margin-top:15px">
+			<div class="col-md-12">
+				<button id="tag_set" class="btn btn-primary" style="width:100%">确认</button>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	<div id="modal-form" class="modal inmodal fade" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12 b-r goods_area">
+		                    <div class="ibox ">
+		                        <div class="ibox-title">
+		                        	<h5>关联项目选择</h5>
+		                        	<button type="button" class="close close_sku_list" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+		                        </div>
+		                        <div class="ibox-content GOODS_LIST">
+		                            <div class="spiner-example">
+		                                <div class="sk-spinner sk-spinner-wave">
+		                                    <div class="sk-rect1"></div>
+		                                    <div class="sk-rect2"></div>
+		                                    <div class="sk-rect3"></div>
+		                                    <div class="sk-rect4"></div>
+		                                    <div class="sk-rect5"></div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	
+	<div id="modal-form-tag" class="modal inmodal fade" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12 b-r goods_area">
+		                    <div class="ibox ">
+		                        <div class="ibox-title">
+		                        	<h5>编辑标签</h5>
+		                        	<button class="btn btn-info btn-xs add_tag" type="button">添加</button>
+		                        	<button type="button" class="close close_tag_list" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+		                        </div>
+		                        <div class="ibox-content TAG_LIST">
+		                            <div class="spiner-example">
+		                                <div class="sk-spinner sk-spinner-wave">
+		                                    <div class="sk-rect1"></div>
+		                                    <div class="sk-rect2"></div>
+		                                    <div class="sk-rect3"></div>
+		                                    <div class="sk-rect4"></div>
+		                                    <div class="sk-rect5"></div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	
+	<script th:src="@{{sp}/third/plupload/plupload.full.min.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	<script th:src="@{{sp}/third/qiniu/qiniu/qiniu_https.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	<script th:src="|${pub_bucket}/js/plugins/sweetalert/sweetalert.min.js|"></script>
+	
+	<script th:src="|${pub_bucket}/js/plugins/select2/select2.full.min.js|"></script>
+	
+	<!-- Ladda -->
+    <script th:src="|${pub_bucket}/js/plugins/ladda/spin.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.jquery.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/jeditable/jquery.jeditable.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/dataTables/datatables.min.js|"></script>
+    
+    <script th:src="|${pub_bucket}/js/plugins/sweetalert/sweetalert.min.js|"></script>
+	
+	<script>
+		$(document).ready(function() {
+
+			$('#loading-example-btn').click(function() {
+				btn = $(this);
+				simpleLoad(btn, true)
+
+				// Ajax example
+				//                $.ajax().always(function () {
+				//                    simpleLoad($(this), false)
+				//                });
+
+				simpleLoad(btn, false)
+			});
+		});
+
+		function simpleLoad(btn, state) {
+			if (state) {
+				btn.children().addClass('fa-spin');
+				btn.contents().last().replaceWith(" Loading");
+			} else {
+				setTimeout(function() {
+					btn.children().removeClass('fa-spin');
+					btn.contents().last().replaceWith(" Refresh");
+				}, 2000);
+			}
+		}
+	</script>
+</body>
+
+<script type="text/javascript">
+$(function() {
+	$(".select_province").select2({placeholder:'选择省份区域', allowClear:true});
+	$(".do_query").on("click", function() {
+		var store_num = $.trim($("#store_num").val());
+		var select_province = $.trim($("#select_province").find("option:selected").attr("code"));
+		location.href = '/project/store/list?store_num='+store_num+'&select_province='+select_province;
+	});
+	
+	var city_loader = function(ele, pid) {
+		$.ajax({
+            async: false,
+            type: 'GET',
+            url: "/project/common/city/list",
+            data: {id:pid },
+            dataType: "json",
+            success: function(data) {
+            	if(data.available&&data.data!=null) {
+    				$('#' + ele).html('<option value="-1">请选择</option>');
+    				for(ci in data.data) {
+    					var html = '<option attr_id="' + data.data[ci].id + '" value="' + data.data[ci].city_no + '">' + data.data[ci].city_name + '</option>';
+    					$('#' + ele).append(html);
+    				}
+    				$('#' + ele).val(-1);
+    			}
+            }
+        });
+	}
+	city_loader('province', null);
+	$("#province").on("change", function() {
+		$("#city").html('<option value="-1">请选择</option>');
+		$("#zone").html('<option value="-1">请选择</option>');
+		city_loader('city', $(this).find("option:selected").attr("attr_id"));
+	});
+	$("#city").on("change", function() {
+		$("#zone").html('<option value="-1">请选择</option>');
+		city_loader('zone', $(this).find("option:selected").attr("attr_id"));
+	});
+	
+	var s_id = 0;
+	$(".new_store").on("click", function(){
+		s_id = 0;
+		$("#store_no").val("");
+		$("#store_name").val("");
+		$("#province").val("请选择");
+		$("#city").val("请选择");
+		$("#zone").val("请选择");
+		$("#store_address").val("");
+		$("#store_phone").val("");
+		$("#store_info").val("");
+		$("#store_cinema_num").val("");
+		$("#store_logo").val("");
+		$("#store_logo_img").attr("src", "");
+		$("#store_handle_fee").val("");
+		layer.open({
+			area : [ '70%', '80%' ],
+			type : 1,
+			title:"添加门店",
+			content : $("#templatemo-preferences-form")
+		});
+	});
+	
+	$(".edit").on("click", function(){
+		s_id = $(this).attr("attr_id");
+		var url = "/project/store/aj/view?" + new Date().getTime();
+		var index = layer.load(0, {shade: false});
+		$.get(url, {id:s_id}, function(data){
+			layer.close(index);
+			console.log(data);
+			if(data.available) {
+				var store_info = data.data;
+				$("#store_no").val(store_info.store_no);
+				$("#store_name").val(store_info.store_name);
+				
+				if(store_info.province_no!=null) {
+					$("#province").val(store_info.province_no);
+					$("#province").trigger("change");						
+				}
+				
+				if(store_info.city_no!=null) {
+					$("#city").val(store_info.city_no);
+					$("#city").trigger("change");						
+				}
+				
+				if(store_info.zone_no!=null) {
+					$("#zone").val(store_info.zone_no);
+				}
+				$("#store_address").val(store_info.address);
+				$("#store_phone").val(store_info.phone);
+				$("#store_info").val(store_info.address);
+				
+				layer.open({
+					area : [ '60%', '80%' ],
+					type : 1,
+					title:"编辑信息",
+					content : $("#templatemo-preferences-form")
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = '操作失败：' + code;
+				layer.msg(msg, {icon: 2});
+			}
+		});
+	});
+	var l = $(".ladda-button").ladda();
+	$(".save_store").on("click", function(){
+		var store_no = $.trim($("#store_no").val());
+		var store_name = $.trim($("#store_name").val());
+		var province = $.trim($("#province").find("option:selected").attr("attr_id"));
+		var city = $.trim($("#city").find("option:selected").attr("attr_id"));
+		var zone = $.trim($("#zone").find("option:selected").attr("attr_id"));
+		
+		var store_address = $.trim($("#store_address").val());
+		var store_phone = $.trim($("#store_phone").val());
+		var store_info = $.trim($("#store_info").val());
+		
+		var store_logo = $.trim($("#store_logo").val());
+		
+		if(store_no==null||store_no=="") {
+			layer.msg("请输入门店编号", {icon: 2});
+			return;
+		}
+		if(store_name==null||store_name=="") {
+			layer.msg("请输入门店名称", {icon: 2});
+			return;
+		}
+		if(province==null) {
+			layer.msg("请选择省份", {icon: 2});
+			return;
+		}
+		if(city==null) {
+			layer.msg("请选择城市", {icon: 2});
+			return;
+		}
+		if(store_address==null||store_address=="") {
+			layer.msg("请输入门店地址", {icon: 2});
+			return;
+		}
+		var formData = new FormData();
+		formData.append('id', s_id);
+		formData.append('store_no', store_no);
+		formData.append('store_name', store_name);
+		formData.append('province', province);
+		formData.append('city', city);
+		formData.append('zone', zone);
+		formData.append('store_address', store_address);
+		formData.append('store_phone', store_phone);
+		formData.append('store_info', store_info);
+		formData.append('store_logo', document.getElementById("store_logo").files[0]);
+		
+        var $this = $(this);
+		$this.ladda('start');
+        $.ajax({
+            url: '/project/store/aj/save',
+            type: "POST",
+            data: formData,
+            datatype:"json",
+            contentType: false,
+            processData: false,
+            traditional: true,
+            success: function (data) {
+           		$this.ladda('stop');
+           		layer.closeAll();
+           		if(data.available) {
+    				swal({title: "Good job!", text: "操作成功", type: "success"}, function() {
+    					location.reload();
+    				});
+    			} else {
+    				var code = data.messages[0];
+    				var msg = '操作失败：' + code;
+    				layer.msg(msg, {icon: 2});
+    			}
+            },
+            error: function () {
+           		layer.closeAll();
+           		$this.ladda('stop');
+           		swal({title: "Error", text: "操作失败", type: "error"});
+            }
+        });
+	});
+	
+	$(".bind_proj").on("click", function() {
+		var $this = $(this);
+		$.get('/project/store/aj/pls?' + new Date().getTime(), {}, function(data) {
+			if(data.available&&data.data!=null) {
+				var html = '<div class="tab-content">'
+				html += '<div id="tab-2" class="tab-pane active">';
+				html += '<div class="full-height-scroll">';
+				html += '<div class="table-responsive">';
+				html += '<table class="table table-striped table-hover">';
+				html += '<tbody>';
+				
+				for(x in data.data.result) {
+					var tmp_obj = data.data.result[x];
+					html += '<tr>';
+					html += '<td><a data-toggle="tab" href="javascript:void(0)" class="do_choose client-link" _id="' + tmp_obj.id + '">' + tmp_obj.proj_name + '</a></td>';
+					html += '<td class="_id"><i class="fa fa-flag"></i> ' + tmp_obj.domain + '</td>';
+					//html += '<td class="client-status"><button class="choose_gm btn btn-primary btn-circle" gmid="' + tmp_obj.id + '"><i class="fa fa-check"></i></button></td>';
+					html += '<td class="client-status"><button class="do_choose btn btn-primary btn-circle" _id="' + tmp_obj.id + '"><i class="fa fa-check"></i></button></td>';
+					html += '</tr>';
+				}
+				html += '</tbody></table></div></div></div></div>';
+				$(".GOODS_LIST").html(html);
+				$(".do_choose").on("click", function() {
+					var _id = $(this).attr("_id");
+					$.get('/project/store/aj/bind?' + new Date().getTime(), {store_id:$this.attr("attr_id"),p_id:_id}, function(data) {
+						if(data.available) {
+							swal({title: "Good job!", text: "门店项目关联成功", type: "success"}, function() {
+								$(".close_sku_list").trigger("click");
+								location.reload();
+							});
+						} else {
+							var code = data.messages[0];
+							if(data.messages.length>1) {
+								code = data.messages[1] + "，" + code; 
+							}
+							var msg = "操作失败：" + code;
+							layer.msg(msg, {shift: 6});
+						}
+					});
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = "没有数据：" + code;
+				layer.msg(msg, {shift: 6});
+			}
+		});
+	});
+	
+	$(".mg_tag").on("click", function() {
+		var $this = $(this);
+		$("#tag_sid").val($this.attr("attr_id"));
+		$.get('/project/store/aj/tags?' + new Date().getTime(), {store_id:$this.attr("attr_id")}, function(data) {
+			if(data.available&&data.data!=null) {
+				var html = '<div class="tab-content">'
+				html += '<div id="tab-2" class="tab-pane active">';
+				html += '<div class="full-height-scroll">';
+				html += '<div class="table-responsive">';
+				html += '<table class="table table-striped table-hover">';
+				html += '<tbody>';
+				
+				for(x in data.data) {
+					var tmp_obj = data.data[x];
+					var tag_code = tmp_obj.code?tmp_obj.code:'';
+					var tag_tips = tmp_obj.tips?tmp_obj.tips:'';
+					html += '<tr>';
+					html += '<td><a data-toggle="tab" href="javascript:void(0)" class="do_choose client-link" _id="' + tmp_obj.id + '">' + tag_code + '</a></td>';
+					html += '<td class="_id"><i class="fa fa-flag"></i> ' + tmp_obj.name + '</td>';
+					html += '<td class="_id">' + tag_tips + '</td>';
+					html += '<td class="client-status"><button class="do_remove btn btn-danger btn-circle" _id="' + tmp_obj.id + '"><i class="fa fa-times"></i></button></td>';
+					html += '</tr>';
+				}
+				html += '</tbody></table></div></div></div></div>';
+				$(".TAG_LIST").html(html);
+				$(".do_remove").on("click", function() {
+					var _id = $(this).attr("_id");
+					$.get('/project/store/aj/remove_tag?' + new Date().getTime(), {id:_id}, function(data) {
+						if(data.available&&data.data!=null) {
+							swal({title: "Good job!", text: "删除成功", type: "success"}, function() {
+								$(".close_tag_list").trigger("click");
+							});
+						} else {
+							var code = data.messages[0];
+							var msg = "操作失败：" + code;
+							layer.msg(msg, {shift: 6});
+						}
+					});
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = "没有标签数据：" + code;
+				layer.msg(msg, {shift: 6});
+				$(".close_tag_list").trigger("click");
+			}
+		});
+	});
+	
+	$(".add_tag").on("click", function() {
+		layer.open({
+			area : [ '40%', '40%' ],
+			type : 1,
+			title:"添加标签",
+			content : $("#tag_op_form")
+		});
+	});
+	$("#tag_set").on("click", function() {
+		var tag_sid = $("#tag_sid").val();
+		var tags = $("#tags").val();
+		$.post('/project/store/aj/save_tag', {store_id:tag_sid,tags:tags}, function(data) {
+			layer.closeAll();
+			if(data.available) {
+				swal({title: "Good job!", text: "操作成功", type: "success"});
+				location.reload();
+			} else {
+				var code = data.messages[0];
+				var msg = "操作失败：" + code;
+				layer.msg(msg, {shift: 6});
+			}
+		});
+	});
+	$(".bind_tips").on("click", function() {
+		layer.tips('不支持项目重复绑定操作', this, {tips: [4, '#78BA32'] });
+	});
+});
+</script>
+
+</html>

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 项目配置管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/ladda/ladda-themeless.min.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/sweetalert/sweetalert.css|" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-sm-4">
+					<h2>[[${project.proj_name}]]</h2>
+					<ol class="breadcrumb">
+						<li><a href="javascript:;">Home</a></li>
+						<li class="active"><strong>项目配置列表</strong></li>
+					</ol>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="wrapper wrapper-content animated fadeInUp">
+
+						<div class="ibox">
+							<div class="ibox-content">
+								<div class="row">
+					                <div class="col-lg-12">
+					                    <div class="tabs-container">
+					                        <ul class="nav nav-tabs">
+					                        	<li class='' th:classappend="${ct.count}==1?active" th:each="m, ct:${supp_config_types}">
+					                        		<a data-toggle="tab" th:key="${m.key}" th:href="|#tab-${ct.count}|">[[${m.value }]]</a>
+					                        	</li>
+					                        	<!-- 
+					                            <li class="active"><a data-toggle="tab" href="#tab-1"> 支付方式配置</a></li>
+					                            <li class=""><a data-toggle="tab" href="#tab-2">配送方式配置</a></li>
+					                            <li class=""><a data-toggle="tab" href="#tab-3">其他配置</a></li>
+					                             -->
+					                        </ul>
+					                        <div class="tab-content">
+					                            <div id="tab-1" class="tab-pane active">
+													<div class="table-responsive">
+					                                	<table class="table table-striped">
+															<thead>
+							                                    <tr>
+							                                    	<th>状态</th>
+							                                    	<th>分类代码</th>
+							                                        <th>应用代码</th>
+																	<th>名称</th>
+																	<th>显示名称</th>
+																	<th>提示信息</th>
+																	<th>APPID</th>
+																	<th>密钥配置</th>
+																	<th>退款配置</th>
+																	<th>操作</th>
+							                                    </tr>
+						                                    </thead>
+															<tbody>
+																<tr th:each="a:${allow_pts}" th:if="${a.sc_type=='1000'}" th:sc_code="${a.sc_code}" th:sc_type="${a.sc_type}">
+																	<td>
+																		<button class="btn btn-primary btn-xs" type="button" th:if="${a.flag==0}"><i class="fa fa-check"></i></button>
+																		<button class="btn btn-warning btn-xs" type="button" th:if="${a.flag!=0}"><i class="fa fa-warning"></i></button>
+																	</td>
+																	<td>[[${a.sc_code_cat}]]</td>
+																	<td>[[${a.sc_code}]]</td>
+																	<td>[[${a.sc_name}]]</td>
+																	<td>[[${a.disname}]]</td>
+																	<td>[[${a.sc_info}]]</td>
+																	<td>[[${a.partner}]]</td>
+																	<td><button data-style="zoom-in" class="ladda-button btn btn-danger btn-xs key_config" type="button" th:attr_id="${a.id }" th:if="${a.sc_code!='101001'&&a.sc_code!='001001'}"><i class="fa fa-edit"></i> 配置</button>
+																		<button data-style="zoom-in" class="ladda-button btn btn-danger btn-xs key_config" type="button" th:attr_id="${a.id }" th:if="${a.sc_code=='101001'||a.sc_code=='001001'}" disabled="disabled"><i class="fa fa-edit"></i> 配置</button></td>
+																	<td>
+																		<button th:if="${a.rollback>0}" data-style="zoom-in" class="ladda-button btn btn-danger btn-xs do_config_rollback" type="button" th:attr_id="${a.id }"><i class="fa fa-edit"></i> 配置</button>
+																		<span th:if="${a.rollback==0}" th:text="不支持退款操作"></span>
+																	</td>
+																	<td>
+																		<button data-style="zoom-in" class="ladda-button btn btn-white btn-sm edit" th:attr_id="${a.id }"><i class="fa fa-pencil"></i> 编辑 </button>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+					                            </div>
+					                            
+					                            <div id="tab-2" class="tab-pane">
+													<div class="table-responsive">
+					                                	<table class="table table-striped">
+															<thead>
+							                                    <tr>
+							                                        <th>代码</th>
+																	<th>名称</th>
+																	<th>提示信息</th>
+																	<th>操作</th>
+							                                    </tr>
+						                                    </thead>
+															<tbody>
+																<tr th:each="c:${allow_pts}" th:if="${c.sc_type=='2000'}" th:attr_id="${c.id }">
+																	<td>
+																		<a href="javascript:;">[[${c.sc_code}]]</a><br/> 
+																		<small>更新时间 [[${#dates.format(c.c_time, 'yyyy-MM-dd')}]]</small>
+																	</td>
+																	<td>[[${c.sc_name }]]</td>
+																	<td>[[${c.sc_info }]]</td>
+																	<td>
+																		<button class="btn btn-white btn-sm edit" th:attr_id="${c.id }"><i class="fa fa-pencil"></i> 编辑 </button>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+					                            </div>
+					                            <div id="tab-3" class="tab-pane">
+													<div class="table-responsive">
+					                                	<table class="table table-striped">
+															<thead>
+							                                    <tr>
+							                                        <th>代码</th>
+																	<th>名称</th>
+																	<th>提示信息</th>
+																	<th>操作</th>
+							                                    </tr>
+						                                    </thead>
+															<tbody>
+																<tr th:each="c:${supp_configs}" th:if="${c.sc_type!='1000'} and ${c.sc_type!='2000'}" th:attr_id="${c.id }">
+																	<td>
+																		<a href="javascript:;">[[${c.sc_code}]]</a><br/> 
+																		<small>更新时间 [[${#dates.format(c.c_time, 'yyyy-MM-dd')}]]</small>
+																	</td>
+																	<td>[[${c.sc_name }]]</td>
+																	<td>[[${c.sc_info }]]</td>
+																	<td>
+																		<button class="btn btn-white btn-sm edit" th:attr_id="${c.id }"><i class="fa fa-pencil"></i> 编辑 </button>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+					                            </div>
+					                            
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="../../common/foot"></div>
+		</div>
+	</div>
+	
+	
+	<div id="templatemo-preferences-form" style="display:none;padding-left:15px;padding-right:15px">
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="partner_num" class="control-label">APPID<span style="color:red">（*）</span></label>
+				<input type="text" class="form-control" id="partner_num" placeholder="请输入APPID">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="dis_name" class="control-label">显示名称</label>
+				<input type="text" class="form-control" id="dis_name" placeholder="请输入用户看到的名称">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="dis_tips" class="control-label">提示信息</label>
+				<input type="text" class="form-control" id="dis_tips" placeholder="请输入提示信息">
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons" style="margin-top:15px">
+			<div class="col-md-12">
+				<button id="do_update_info" data-style="zoom-in" class="ladda-button btn btn-primary" style="width:100%">保存</button>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div id="config_form_1000_201" style="display:none;padding-left:15px;padding-right:15px">
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="wxpay_mch_id" class="control-label">微信支付商户号<span style="color:red">（*）</span></label>
+				<input type="text" class="form-control mch_id" id="wxpay_mch_id" placeholder="请输入微信支付商户号">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="wxpay_key" class="control-label">微信支付密钥<span style="color:red">（*）</span></label>
+				<textarea rows="5" id="wxpay_key" placeholder='请输入微信支付密钥' class='form-control pri_key'></textarea>
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons" style="margin-top:15px">
+			<div class="col-md-12">
+				<button data-style="zoom-in" class="ladda-button btn btn-primary do_update_config" style="width:100%">保存</button>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div id="config_form_1000_202" style="display:none;padding-left:15px;padding-right:15px">
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="alipay_mch_id" class="control-label">支付宝商户号<span style="color:red">（*）</span></label>
+				<input type="text" class="form-control mch_id" id="alipay_mch_id" placeholder="请输入支付宝商户号">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="alipay_mch_pri_key" class="control-label">商户应用私钥<span style="color:red">（*）</span></label>
+				<textarea rows="8" id="alipay_mch_pri_key" placeholder='请输入商户应用私钥' class='form-control pri_key'></textarea>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="alipay_pub_key" class="control-label">支付宝公钥<span style="color:red">（*）</span></label>
+				<textarea rows="5" id="alipay_pub_key" placeholder='请输入支付宝公钥' class='form-control pub_key'></textarea>
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons" style="margin-top:15px">
+			<div class="col-md-12">
+				<button data-style="zoom-in" class="ladda-button btn btn-primary do_update_config" style="width:100%">保存</button>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div id="config_form_1000_301" style="display:none;padding-left:15px;padding-right:15px">
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="ipaynow_mch_id" class="control-label">现在支付商户号</label>
+				<input type="text" class="form-control mch_id" id="ipaynow_mch_id" placeholder="请输入现在支付商户号">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="ipaynow_pri_key" class="control-label">现在支付密钥</label>
+				<textarea rows="8" id="ipaynow_pri_key" placeholder='请输入现在支付密钥' class='form-control pri_key'></textarea>
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons" style="margin-top:15px">
+			<div class="col-md-12">
+				<button data-style="zoom-in" class="ladda-button btn btn-primary do_update_config" style="width:100%">保存</button>
+			</div>
+		</div>
+	</div>
+	
+	<div id="templatemo-preferences-form-rb" style="display:none;padding-left:15px;padding-right:15px">
+		<div class="row">
+			<div class="col-md-6 margin-bottom-15">
+				<label for="rb_kt">密钥类型</label> 
+				<select name="rb_kt" class="form-control margin-bottom-15" id="rb_kt">
+					<option value="0">文本信息</option>
+					<option value="1">证书文件</option>
+				</select>
+			</div>
+			<div class="col-md-6 margin-bottom-15">
+				<label for="rb_ft">证书格式</label> 
+				<select name="rb_ft" class="form-control margin-bottom-15" id="rb_ft">
+					<option value="PKCS12">PKCS12</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="rb_file" class="control-label">证书文件</label>
+				<input type="file" class="form-control" id="rb_file" placeholder="请选择证书文件">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="rb_kp" class="control-label">证书密码</label>
+				<input type="text" class="form-control" id="rb_kp" placeholder="请输入证书密码，仅对证书类配置生效">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="rb_key" class="control-label">密钥信息</label>
+				<textarea rows="8" class="form-control" id="rb_key" placeholder="请输入密钥信息，仅对文本类配置生效"></textarea>
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons" style="margin-top:15px">
+			<div class="col-md-12">
+				<button id="update_rb_config" data-style="zoom-in" class="ladda-button btn btn-primary" style="width:100%">保存</button>
+			</div>
+		</div>
+	</div>
+	
+	<input type="hidden" class="form-control" id="sc_code">
+	<input type="hidden" class="form-control" id="sc_type">
+	
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	
+	<!-- Ladda -->
+    <script th:src="|${pub_bucket}/js/plugins/ladda/spin.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.jquery.min.js|"></script>
+    
+    <script th:src="|${pub_bucket}/js/plugins/sweetalert/sweetalert.min.js|"></script>
+
+	<script>
+		$(document).ready(function() {
+
+			$('#loading-example-btn').click(function() {
+				btn = $(this);
+				simpleLoad(btn, true)
+
+				simpleLoad(btn, false)
+			});
+		});
+
+		function simpleLoad(btn, state) {
+			if (state) {
+				btn.children().addClass('fa-spin');
+				btn.contents().last().replaceWith(" Loading");
+			} else {
+				setTimeout(function() {
+					btn.children().removeClass('fa-spin');
+					btn.contents().last().replaceWith(" Refresh");
+				}, 2000);
+			}
+		}
+	</script>
+</body>
+
+<script th:inline="javascript">
+$(function() {
+	let sel_p = "[[${project.id}]]";
+	var l = $(".ladda-button").ladda();
+	$(".edit").on("click", function() {
+		var $this = $(this);
+		$("#sc_code").val($this.parent().parent().attr('sc_code'));
+		$("#sc_type").val($this.parent().parent().attr('sc_type'));
+		if(!$this.attr("attr_id")) {
+			$("#partner_num").val('');
+			$("#dis_name").val('');
+			$("#dis_tips").val('');
+			layer.open({
+				area : [ '60%', '80%'],
+				type : 1,
+				content : $("#templatemo-preferences-form"),
+				title:"编辑信息"
+			});
+		} else {
+			$this.ladda('start');
+			$.get('/project/project/config/aj/view_general?'+new Date().getTime(), {_id:$this.attr('attr_id')}, function(data) {
+				$this.ladda('stop');
+				if(data.available) {
+					$("#partner_num").val(data.data.partner);
+					$("#dis_name").val(data.data.disname);
+					$("#dis_tips").val(data.data.sc_info);
+					layer.open({
+						area : [ '60%', '80%'],
+						type : 1,
+						content : $("#templatemo-preferences-form"),
+						title:"编辑信息"
+					});
+				} else {
+					var code = data.messages[0];
+					var msg = '操作失败：' + code;
+					layer.msg(msg, {icon: 2});
+				}
+			});
+		}
+	});
+	$("#do_update_info").on("click", function() {
+		var partner = $.trim($("#partner_num").val());
+		if(!partner) {
+			layer.msg('请输入APPID', {icon: 2});
+			return;
+		}
+		var disname = $.trim($("#dis_name").val());
+		var dis_tips = $.trim($("#dis_tips").val());
+		var sc_code = $("#sc_code").val();
+		var sc_type = $("#sc_type").val();
+		var $this = $(this);
+		$this.ladda('start');
+		var param = {sel_p:sel_p,partner:partner,disname:disname,sc_info:dis_tips,sc_code:sc_code,sc_type:sc_type};
+		$.post('/project/project/config/aj/save_general',param, function(data) {
+			$this.ladda('stop');
+			layer.closeAll();
+			if(data.available) {
+				swal({title: "Good job!", text: "操作成功", type: "success"}, function() {
+					location.reload();
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = '操作失败：' + code;
+				layer.msg(msg, {icon: 2});
+			}
+		});
+	});
+	
+	$(".key_config").on("click", function() {
+		var $this = $(this);
+		var sc_code = $this.parent().parent().attr('sc_code');
+		var sc_type = $this.parent().parent().attr('sc_type');
+		$("#sc_code").val(sc_code);$("#sc_type").val(sc_type);
+		
+	/* 	if($("#config_form_" + sc_type + "_" + sc_code.substring(0,3)).length<1) {
+			var info_name = $(this).parent().parent().find('td').eq(1).html();
+			swal({title: "提示", text: info_name + "无需进行密钥配置操作", type: "warning"});
+			return;
+		} */
+		if(!$this.attr("attr_id")) {
+			$("#config_form_" + sc_type + "_" + sc_code.substring(0,3)).find('.mch_id').val('');
+			$("#config_form_" + sc_type + "_" + sc_code.substring(0,3)).find('.pri_key').val('');
+			$("#config_form_" + sc_type + "_" + sc_code.substring(0,3)).find('.pub_key').val('');
+			layer.open({
+				area : [ '60%', '80%'],
+				type : 1,
+				title:"密钥配置",
+				content : $("#config_form_" + sc_type + "_" + sc_code.substring(0,3))
+			});
+		} else {
+			$this.ladda('start');
+			$.get('/project/project/config/aj/view_general?'+new Date().getTime(), {_id:$this.attr('attr_id')}, function(data) {
+				$this.ladda('stop');
+				if(data.available) {
+					$("#config_form_" + sc_type + "_" + sc_code.substring(0,3)).find('.mch_id').val(data.data.mchid);
+					$("#config_form_" + sc_type + "_" + sc_code.substring(0,3)).find('.pri_key').val(data.data.pri_key);
+					$("#config_form_" + sc_type + "_" + sc_code.substring(0,3)).find('.pub_key').val(data.data.pub_key);
+					layer.open({
+						area : [ '60%', '80%'],
+						type : 1,
+						title:"密钥配置",
+						content : $("#config_form_" + sc_type + "_" + sc_code.substring(0,3))
+					});
+				} else {
+					var code = data.messages[0];
+					var msg = '操作失败：' + code;
+					layer.msg(msg, {icon: 2});
+				}
+			});
+		}
+	});
+	
+	$(".do_update_config").on("click", function() {
+		var sc_code = $("#sc_code").val();
+		var sc_type = $("#sc_type").val();
+		
+		var mch_id = $(this).parent().parent().parent().find('.mch_id').val();
+		var pri_key = $(this).parent().parent().parent().find('.pri_key').val();
+		var pub_key = $(this).parent().parent().parent().find('.pub_key').val();
+		var $this = $(this);
+		$this.ladda('start');
+		var param = {sel_p:sel_p,mch_id:mch_id,pri_key:pri_key,pub_key:pub_key,sc_code:sc_code,sc_type:sc_type};
+		$.post('/project/project/config/aj/save_key',param, function(data) {
+			$this.ladda('stop');
+			layer.closeAll();
+			if(data.available) {
+				swal({title: "Good job!", text: "操作成功", type: "success"}, function() {
+					location.reload();
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = '操作失败：' + code;
+				layer.msg(msg, {icon: 2});
+			}
+		});
+	});
+	
+	$(".do_config_rollback").on("click", function() {
+		var $this = $(this);
+		var sc_code = $this.parent().parent().attr('sc_code');
+		var sc_type = $this.parent().parent().attr('sc_type');
+		$("#sc_code").val(sc_code);$("#sc_type").val(sc_type);
+		$this.ladda('start');
+		$.get('/project/project/config/aj/view_general?'+new Date().getTime(), {_id:$(this).attr("attr_id")}, function(data) {
+			$this.ladda('stop');
+			if(data.available) {
+				$("#rb_kt").val(data.data.rb_key_type);
+				$("#rb_ft").val(data.data.rb_key_format);
+				$("#rb_key").val(data.data.rb_key);
+				$("#rb_kp").val(data.data.rb_kp);
+				layer.open({
+					area : [ '60%', '80%'],
+					type : 1,
+					content : $("#templatemo-preferences-form-rb"),
+					title : "退款配置"
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = '操作失败：' + code;
+				layer.msg(msg, {icon: 2});
+			}
+		})
+	});
+	
+	$("#update_rb_config").on("click", function() {
+		var rb_kt = $.trim($("#rb_kt").val());
+		var rb_ft = $.trim($("#rb_ft").val());
+		var rb_key = $.trim($("#rb_key").val());
+		var rb_kp = $.trim($("#rb_kp").val());
+		var $this = $(this);
+		
+		var sc_code = $("#sc_code").val();
+		var sc_type = $("#sc_type").val();
+		var param = {sel_p:sel_p,rb_kt:rb_kt,rb_ft:rb_ft,rb_key:rb_key,rb_kp:rb_kp,sc_code:sc_code,sc_type:sc_type};
+		$this.ladda('start');
+		
+        var formData = new FormData();
+        formData.append("rb_file", document.getElementById("rb_file").files[0]);
+        formData.append('rb_kt', rb_kt);
+        formData.append('rb_ft', rb_ft);
+        formData.append('rb_key', rb_key);
+        formData.append('rb_kp', rb_kp);
+        formData.append('sc_code', sc_code);
+        formData.append('sc_type', sc_type);
+        formData.append('sel_p', sel_p);
+        $.ajax({
+            url: "/project/project/config/aj/save_rb",
+            type: "POST",
+            data: formData,
+            datatype:"json",
+            contentType: false,
+            processData: false,
+            traditional: true,
+            success: function (data) {
+           	 $this.ladda('stop');
+           	 layer.closeAll();
+           	if(data.available) {
+    				swal({title: "Good job!", text: "操作成功", type: "success"}, function() {
+    					location.reload();
+    				});
+    			} else {
+    				var code = data.messages[0];
+    				var msg = '操作失败：' + code;
+    				layer.msg(msg, {icon: 2});
+    			}
+            },
+            error: function () {
+           	 layer.closeAll();
+           	 $this.ladda('stop');
+           	 swal({title: "Error", text: "操作失败", type: "error"});
+            }
+        });
+		
+	});
+});
+</script>
+
+</html>

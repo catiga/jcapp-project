@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> | 登陆</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+	<div class="loginColumns animated fadeInDown">
+		<div class="row">
+			<div class="col-md-6">
+				<h2 class="font-bold">Welcome to [[${now_proj.proj_name }]]</h2>
+				<p>[[${now_proj.info }]]</p>
+				<p>
+					<small>[[${now_proj.brief }]].</small>
+				</p>
+
+			</div>
+			<div class="col-md-6">
+				<div class="ibox-content">
+					<form class="m-t" role="form" action="#">
+						<div class="form-group">
+							<input class="form-control jc_name" placeholder="Username" required="">
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control jc_pwd" placeholder="Password" required="">
+						</div>
+						<button type="button" class="btn btn-primary block full-width m-b jc_login">Login</button>
+						
+						<!-- 
+						<a href="login_two_columns.html#"> <small>Forgot password?</small></a>
+						<p class="text-muted text-center">
+							<small>Do not have an account?</small>
+						</p>
+						<a class="btn btn-sm btn-white btn-block" href="register.html">Create an account</a>
+						 -->
+					</form>
+					<p class="m-t">
+						<small>jeancoder tech support &copy; 2018</small>
+					</p>
+				</div>
+			</div>
+		</div>
+		<hr />
+		<div class="row">
+			<div class="col-md-6"><strong>Copyright</strong> jeancoder &copy;</div>
+			<div class="col-md-6 text-right">
+				<small>© 2016-2020</small>
+			</div>
+		</div>
+	</div>
+	
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+</body>
+<script type="text/javascript">
+$(function() {
+	$(".jc_login").on("click", function() {
+		var jc_name = $.trim($(".jc_name").val());
+		var jc_pwd = $.trim($(".jc_pwd").val());
+		if(jc_name=="") {
+			layer.msg('请输入用户名', {icon: 2});
+			return;
+		}
+		if(jc_pwd=="") {
+			layer.msg('请输入密码', {icon: 2});
+			return;
+		}
+		var index = layer.load();
+		$.post('/project/index/aj/login', {jc_name:jc_name,jc_pwd:jc_pwd}, function(data) {
+			layer.close(index);
+			if(data.available) {
+				layer.msg('登录成功，正在为您跳转', {icon: 4});
+				location.href = "/project/desktop/index/?" + Date.parse(new Date());
+			} else {
+				var code = data.messages[0];
+				layer.msg('认证失败，请重试：' + code, {icon: 2});
+			}
+		});
+	});
+});
+</script>
+</html>
