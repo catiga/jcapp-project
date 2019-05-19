@@ -201,6 +201,18 @@
 				<input type="text" class="form-control" id="store_info" placeholder="请输入店铺信息">
 			</div>
 		</div>
+		
+		<div class="row">
+			<div class="col-md-6 margin-bottom-15">
+				<label for="store_longitude" class="control-label">经度</label>
+				<input type="text" class="form-control" id="store_longitude" placeholder="请输入门店经度">
+			</div>
+			<div class="col-md-6 margin-bottom-15">
+				<label for="store_latitude" class="control-label">纬度</label>
+				<input type="text" class="form-control" id="store_latitude" placeholder="请输入门店纬度">
+			</div>
+		</div>
+		
 		<div class="row">
 			<div class="col-md-12 margin-bottom-15">
 				<label for="store_logo" class="control-label">店铺LOGO</label>
@@ -409,6 +421,8 @@ $(function() {
 		$("#store_logo").val("");
 		$("#store_logo_img").attr("src", "");
 		$("#store_handle_fee").val("");
+		$("#store_latitude").val('');
+		$("#store_longitude").val('');
 		layer.open({
 			area : [ '70%', '80%' ],
 			type : 1,
@@ -446,6 +460,9 @@ $(function() {
 				$("#store_phone").val(store_info.phone);
 				$("#store_info").val(store_info.address);
 				
+				$("#store_latitude").val(store_info.latitude);
+				$("#store_longitude").val(store_info.longitude);
+				
 				layer.open({
 					area : [ '60%', '80%' ],
 					type : 1,
@@ -470,7 +487,8 @@ $(function() {
 		var store_address = $.trim($("#store_address").val());
 		var store_phone = $.trim($("#store_phone").val());
 		var store_info = $.trim($("#store_info").val());
-		
+		let store_latitude = $.trim($("#store_latitude").val());
+		let store_longitude = $.trim($("#store_longitude").val());
 		var store_logo = $.trim($("#store_logo").val());
 		
 		if(store_no==null||store_no=="") {
@@ -504,6 +522,8 @@ $(function() {
 		formData.append('store_phone', store_phone);
 		formData.append('store_info', store_info);
 		formData.append('store_logo', document.getElementById("store_logo").files[0]);
+		formData.append('store_latitude', store_latitude);
+		formData.append('store_longitude', store_longitude);
 		
         var $this = $(this);
 		$this.ladda('start');

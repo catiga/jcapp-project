@@ -70,7 +70,12 @@ if(form.id!=null&&form.id>0) {
 	}
 	
 	store.c_time = new Timestamp(Calendar.getInstance().getTimeInMillis());
-	
+	if(form.store_longitude) {
+		store.longitude = form.store_longitude;
+	}
+	if(form.store_latitude) {
+		store.latitude = form.store_latitude;
+	}
 	store_service.update(store);
 } else {
 	//新增门店
@@ -95,7 +100,12 @@ if(form.id!=null&&form.id>0) {
 	if(logo_file!=null) {
 		store.store_logo = logo_file;
 	}
-	
+	if(form.store_longitude) {
+		store.longitude = form.store_longitude;
+	}
+	if(form.store_latitude) {
+		store.latitude = form.store_latitude;
+	}
 	store_service.save(store);
 }
 return SimpleAjax.available();
