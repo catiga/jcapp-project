@@ -44,17 +44,17 @@
 	</build>
 
 	<dependencies>
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.jeancoder</groupId>
 			<artifactId>jeancoder-app-sdk</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency> -->
+		</dependency>
 		
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.jeancoder.root</groupId>
 			<artifactId>jeancoder_sdk</artifactId>
 			<version>0.0.1</version>
-		</dependency>
+		</dependency> -->
 		
 		<dependency>
 			<groupId>junit</groupId>
