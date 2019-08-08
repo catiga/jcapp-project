@@ -38,7 +38,7 @@ function on_redirect(obj) {
 		<!-- END LOGO -->
 	</div>
 	<div class="login-wrap">
-		<div th:each="sa,saStat:${sys_apps}" th:if="${sa.appName!='H5公众号'&&sa.appName!='收银台'&&sa.appName!='后厨'}" th:class="${sa.describe}" th:classappend="${saStat.index%2==0?'single-size metro':'double-size metro'}" >
+		<div th:each="sa,saStat:${sys_apps}" th:if="${sa.appName!='通用H5与接口系统'&&sa.appName!='收银台'&&sa.appName!='后厨'}" th:class="${sa.describe}" th:classappend="${saStat.index%2==0?'single-size metro':'double-size metro'}" >
 			<div class="locked">
 				<a th:href="|/${sa.appCode}/welcome|" class="social-link" onclick="on_redirect(this); return false;">
 					<i class="fa fa-ils"></i> 
