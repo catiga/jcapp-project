@@ -3620,15 +3620,6 @@ CREATE TABLE `sys_dept`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
--- Records of sys_dept
--- ----------------------------
-INSERT INTO `sys_dept` VALUES (1, 9, '中心管理', '', '', NULL, '2019-04-01 16:26:02', '2019-04-01 16:26:02', 0, 1, 1, 1, 11);
-INSERT INTO `sys_dept` VALUES (2, 9, '中心管理', '', '', NULL, '2019-04-01 16:26:03', '2019-04-01 16:26:10', -1, NULL, 1, 1, 11);
-INSERT INTO `sys_dept` VALUES (3, 9, '兰州中心', '', '', 1, '2019-04-01 16:26:43', '2019-04-01 16:27:02', -1, NULL, 2, 1, 11);
-INSERT INTO `sys_dept` VALUES (4, 9, '兰州中心', '2', '', 1, '2019-04-01 16:28:51', '2019-04-01 16:28:51', 0, NULL, 2, 1, 11);
-INSERT INTO `sys_dept` VALUES (5, 9, '格林店', '2', '', 1, '2019-04-01 16:29:12', '2019-04-01 16:29:12', 0, NULL, 2, 1, 11);
-
--- ----------------------------
 -- Table structure for sys_domain_object
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_domain_object`;
@@ -3642,34 +3633,6 @@ CREATE TABLE `sys_domain_object`  (
   `flag` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of sys_domain_object
--- ----------------------------
-INSERT INTO `sys_domain_object` VALUES (1, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'm.iplaysky.com', NULL, 1, '2018-06-26 15:13:56', 0);
-INSERT INTO `sys_domain_object` VALUES (2, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'hdsdfh.piaodaren.com', NULL, 2, '2018-11-06 20:13:25', 0);
-INSERT INTO `sys_domain_object` VALUES (3, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'm.piaodaren.com', NULL, 3, '2018-11-07 11:35:09', 0);
-INSERT INTO `sys_domain_object` VALUES (4, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'ctxx.mt.ex.piaodaren.com', NULL, 4, '2018-11-12 15:00:25', 0);
-INSERT INTO `sys_domain_object` VALUES (5, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'xxjyc.mt.ex.piaodaren.com', NULL, 5, '2018-11-22 11:50:14', 0);
-INSERT INTO `sys_domain_object` VALUES (6, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'btmzc.mt.ex.piaodaren.com', NULL, 6, '2018-12-04 17:12:43', 0);
-INSERT INTO `sys_domain_object` VALUES (7, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'qzjm.mt.ex.piaodaren.com', NULL, 7, '2018-12-10 17:50:14', 0);
-INSERT INTO `sys_domain_object` VALUES (8, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'nxsjyh.mt.ex.piaodaren.com', NULL, 8, '2018-12-18 14:23:44', 0);
-INSERT INTO `sys_domain_object` VALUES (9, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'm.mt.ex.piaodaren.com', NULL, 9, '2019-01-02 14:34:16', 0);
-INSERT INTO `sys_domain_object` VALUES (10, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'qjyc.mt.ex.piaodaren.com', NULL, 10, '2019-01-30 13:35:15', 0);
-INSERT INTO `sys_domain_object` VALUES (11, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'lzadmin.mt.ex.piaodaren.com', NULL, 11, '2019-02-25 17:20:29', 0);
-INSERT INTO `sys_domain_object` VALUES (12, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'ylyc.mt.ex.piaodaren.com', NULL, 12, '2019-03-18 11:25:30', 0);
-INSERT INTO `sys_domain_object` VALUES (13, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'nmyks.mt.ex.piaodaren.com', NULL, 13, '2019-03-20 13:29:40', 0);
-INSERT INTO `sys_domain_object` VALUES (14, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'ahkn.mt.ex.piaodaren.com', NULL, 14, '2019-03-22 15:33:35', 0);
-INSERT INTO `sys_domain_object` VALUES (15, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'nmmq.mt.ex.piaodaren.com', NULL, 15, '2019-03-22 15:56:12', 0);
-INSERT INTO `sys_domain_object` VALUES (16, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'genheyks.mt.ex.piaodaren.com', NULL, 17, '2019-03-22 16:34:13', 0);
-INSERT INTO `sys_domain_object` VALUES (17, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'xqteh.mt.ex.piaodaren.com', NULL, 18, '2019-03-22 17:12:28', 0);
-INSERT INTO `sys_domain_object` VALUES (18, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'dongqi.mt.ex.piaodaren.com', NULL, 19, '2019-03-22 17:25:32', 0);
-INSERT INTO `sys_domain_object` VALUES (19, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'neo.mt.ex.piaodaren.com', NULL, 20, '2019-03-29 15:59:17', 0);
-INSERT INTO `sys_domain_object` VALUES (20, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'zgyc.mt.ex.piaodaren.com', NULL, 21, '2019-04-01 15:21:24', 0);
-INSERT INTO `sys_domain_object` VALUES (21, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'xyc.mt.ex.piaodaren.com', NULL, 22, '2019-04-03 13:51:36', 0);
-INSERT INTO `sys_domain_object` VALUES (22, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'tpyzyl.mt.ex.piaodaren.com', NULL, 23, '2019-04-16 16:17:46', 0);
-INSERT INTO `sys_domain_object` VALUES (23, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'tpyrd.mt.ex.piaodaren.com', NULL, 24, '2019-04-16 17:23:22', 0);
-INSERT INTO `sys_domain_object` VALUES (24, 'com.jeancoder.project.ready.dto.SysProjectInfo', 'tpyzn.mt.ex.piaodaren.com', NULL, 25, '2019-04-16 21:25:28', 0);
 
 -- ----------------------------
 -- Table structure for sys_merchant_info
@@ -3692,7 +3655,7 @@ CREATE TABLE `sys_merchant_info`  (
 -- ----------------------------
 -- Records of sys_merchant_info
 -- ----------------------------
-INSERT INTO `sys_merchant_info` VALUES (1, '就爱优品', '嗨票系统服务商', '2015-10-13 20:57:51', '2018-11-13 00:06:20', 0, NULL, NULL);
+INSERT INTO `sys_merchant_info` VALUES (1, '就爱优品', '系统服务商', '2015-10-13 20:57:51', '2018-11-13 00:06:20', 0, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_orgination
@@ -3710,25 +3673,6 @@ CREATE TABLE `sys_orgination`  (
   `flag` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of sys_orgination
--- ----------------------------
-INSERT INTO `sys_orgination` VALUES (1, '1541680284423', '邯郸时代凤凰', NULL, NULL, 2, '2018-11-08 20:31:24', '2018-11-08 20:31:24', 0);
-INSERT INTO `sys_orgination` VALUES (2, '1542427451073', '嗨票', NULL, NULL, 3, '2018-11-17 12:04:11', '2018-11-17 12:04:11', 0);
-INSERT INTO `sys_orgination` VALUES (3, '1545044234103', '包头MZC全景影城', NULL, NULL, 6, '2018-12-17 18:57:14', '2018-12-17 18:57:14', 0);
-INSERT INTO `sys_orgination` VALUES (4, '1545376904153', '包头MZC全景影城', NULL, NULL, 6, '2018-12-21 15:21:44', '2018-12-21 15:21:44', 0);
-INSERT INTO `sys_orgination` VALUES (5, '1545391158709', '长沙市畅腾潇湘影城', NULL, NULL, 4, '2018-12-21 19:19:18', '2018-12-21 19:19:18', 0);
-INSERT INTO `sys_orgination` VALUES (6, '1545833793035', '星鑫国际影城君悦城店', NULL, NULL, 5, '2018-12-26 22:16:33', '2018-12-26 22:16:33', 0);
-INSERT INTO `sys_orgination` VALUES (7, '1546398801207', '嗨票系统', NULL, NULL, 1, '2019-01-02 11:13:21', '2019-01-02 11:13:21', 0);
-INSERT INTO `sys_orgination` VALUES (8, '1546654735507', '南雄市世纪银河文化传播有限公司', NULL, NULL, 8, '2019-01-05 10:18:55', '2019-01-05 10:18:55', 0);
-INSERT INTO `sys_orgination` VALUES (9, '1551667267639', '兰州统一管理后台', NULL, NULL, 11, '2019-03-04 10:41:07', '2019-03-04 10:41:07', 0);
-INSERT INTO `sys_orgination` VALUES (10, '1553049921053', '海南银龙电影城', NULL, NULL, 12, '2019-03-20 10:45:21', '2019-03-20 10:45:21', 0);
-INSERT INTO `sys_orgination` VALUES (11, '1553601010806', '西旗天鹅湖影院', NULL, NULL, 18, '2019-03-26 19:50:10', '2019-03-26 19:50:10', 0);
-INSERT INTO `sys_orgination` VALUES (12, '1553608109714', '内蒙雅克萨影院', NULL, NULL, 13, '2019-03-26 21:48:29', '2019-03-26 21:48:29', 0);
-INSERT INTO `sys_orgination` VALUES (13, '1554111385365', '深圳万众NEO店', NULL, NULL, 20, '2019-04-01 17:36:25', '2019-04-01 17:36:25', 0);
-INSERT INTO `sys_orgination` VALUES (14, '1554278729351', '新粤城影院', NULL, NULL, 22, '2019-04-03 16:05:29', '2019-04-03 16:05:29', 0);
-INSERT INTO `sys_orgination` VALUES (15, '1555662492412', '太平洋影城（卓尼店）', NULL, NULL, 25, '2019-04-19 16:28:12', '2019-04-19 16:28:12', 0);
 
 -- ----------------------------
 -- Table structure for sys_project_info
@@ -3905,7 +3849,6 @@ CREATE TABLE `t_admin_role`  (
 -- Records of t_admin_role
 -- ----------------------------
 INSERT INTO `t_admin_role` VALUES (1, '超级管理员', '0000', 0, '2019-03-19 18:06:18', '2015-10-12 20:45:31', 1);
-INSERT INTO `t_admin_role` VALUES (2, '售票员', '4000', 0, '2019-04-25 11:31:03', '2019-04-25 11:31:03', 1);
 
 -- ----------------------------
 -- Table structure for t_admin_role_function
@@ -5305,10 +5248,6 @@ CREATE TABLE `t_admin_user`  (
 -- Records of t_admin_user
 -- ----------------------------
 INSERT INTO `t_admin_user` VALUES (1, 'super.admin', '643653d9bdab1532d202a7d2c6ba7078', '13164545789', '2019-04-23 10:58:27', '2015-10-12 20:44:50', 0, '00', '超级管理员', 1, 1);
-INSERT INTO `t_admin_user` VALUES (110, '封阳', 'dc5c7986daef50c1e02ab09b442ee34f', '', '2019-04-26 11:56:49', '2019-04-25 11:44:31', 0, '00', '', 0, 1);
-INSERT INTO `t_admin_user` VALUES (111, '周雪颖', '93dd4de5cddba2c733c65f233097f05a', '', '2019-04-26 09:49:51', '2019-04-25 11:46:22', 0, '00', '', 0, 1);
-INSERT INTO `t_admin_user` VALUES (112, '王艺桦', 'e88a49bccde359f0cabb40db83ba6080', '', '2019-04-26 09:50:12', '2019-04-25 11:46:38', 0, '00', '', 0, 1);
-INSERT INTO `t_admin_user` VALUES (113, '004', '11364907cf269dd2183b64287156072a', '', '2019-04-25 11:46:53', '2019-04-25 11:46:53', 0, '00', '', 0, 1);
 
 -- ----------------------------
 -- Table structure for t_admin_user_project
@@ -5346,146 +5285,6 @@ CREATE TABLE `t_admin_user_role`  (
 -- Records of t_admin_user_role
 -- ----------------------------
 INSERT INTO `t_admin_user_role` VALUES (1, 1, 1, '2018-06-29 12:56:37', 0);
-INSERT INTO `t_admin_user_role` VALUES (2, 2, 2, '2018-11-06 20:32:43', 0);
-INSERT INTO `t_admin_user_role` VALUES (3, 3, 3, '2018-11-07 11:56:17', 0);
-INSERT INTO `t_admin_user_role` VALUES (4, 4, 2, '2018-11-08 17:23:20', 0);
-INSERT INTO `t_admin_user_role` VALUES (5, 5, 2, '2018-11-08 17:24:26', 0);
-INSERT INTO `t_admin_user_role` VALUES (6, 6, 3, '2018-11-09 15:20:04', 0);
-INSERT INTO `t_admin_user_role` VALUES (7, 7, 2, '2018-11-09 15:22:31', 0);
-INSERT INTO `t_admin_user_role` VALUES (8, 8, 2, '2018-11-09 16:25:44', 0);
-INSERT INTO `t_admin_user_role` VALUES (9, 11, 5, '2018-11-12 16:37:03', 0);
-INSERT INTO `t_admin_user_role` VALUES (10, 13, 4, '2018-11-12 17:16:37', 0);
-INSERT INTO `t_admin_user_role` VALUES (11, 13, 2, '2018-11-12 17:16:41', 0);
-INSERT INTO `t_admin_user_role` VALUES (12, 14, 6, '2018-11-12 18:01:19', 0);
-INSERT INTO `t_admin_user_role` VALUES (13, 15, 6, '2018-11-12 18:08:42', 0);
-INSERT INTO `t_admin_user_role` VALUES (14, 16, 6, '2018-11-12 18:09:51', 0);
-INSERT INTO `t_admin_user_role` VALUES (15, 12, 5, '2018-11-13 14:33:03', 0);
-INSERT INTO `t_admin_user_role` VALUES (16, 17, 8, '2018-11-22 12:04:39', 0);
-INSERT INTO `t_admin_user_role` VALUES (17, 18, 8, '2018-11-22 12:04:46', 0);
-INSERT INTO `t_admin_user_role` VALUES (18, 19, 9, '2018-12-04 18:11:24', 0);
-INSERT INTO `t_admin_user_role` VALUES (19, 20, 3, '2018-12-10 11:39:42', 0);
-INSERT INTO `t_admin_user_role` VALUES (20, 21, 10, '2018-12-10 17:54:58', 0);
-INSERT INTO `t_admin_user_role` VALUES (21, 22, 11, '2018-12-11 14:50:29', 0);
-INSERT INTO `t_admin_user_role` VALUES (22, 23, 9, '2018-12-17 18:35:22', 0);
-INSERT INTO `t_admin_user_role` VALUES (23, 24, 9, '2018-12-17 18:44:30', -1);
-INSERT INTO `t_admin_user_role` VALUES (24, 24, 12, '2018-12-17 18:45:02', 0);
-INSERT INTO `t_admin_user_role` VALUES (25, 25, 13, '2018-12-17 18:59:37', -1);
-INSERT INTO `t_admin_user_role` VALUES (26, 26, 13, '2018-12-17 18:59:43', -1);
-INSERT INTO `t_admin_user_role` VALUES (27, 27, 13, '2018-12-17 18:59:48', -1);
-INSERT INTO `t_admin_user_role` VALUES (28, 28, 12, '2018-12-17 18:59:56', 0);
-INSERT INTO `t_admin_user_role` VALUES (29, 29, 13, '2018-12-17 19:00:03', -1);
-INSERT INTO `t_admin_user_role` VALUES (30, 30, 9, '2018-12-17 20:19:05', 0);
-INSERT INTO `t_admin_user_role` VALUES (31, 31, 14, '2018-12-18 14:32:09', 0);
-INSERT INTO `t_admin_user_role` VALUES (32, 32, 1, '2018-12-18 15:25:01', -1);
-INSERT INTO `t_admin_user_role` VALUES (33, 33, 14, '2018-12-18 15:30:10', 0);
-INSERT INTO `t_admin_user_role` VALUES (34, 34, 12, '2018-12-19 17:37:13', -1);
-INSERT INTO `t_admin_user_role` VALUES (35, 8, 4, '2018-12-21 10:09:22', 0);
-INSERT INTO `t_admin_user_role` VALUES (36, 8, 6, '2018-12-21 10:09:23', 0);
-INSERT INTO `t_admin_user_role` VALUES (37, 35, 7, '2018-12-21 15:15:41', 0);
-INSERT INTO `t_admin_user_role` VALUES (38, 36, 13, '2018-12-22 14:38:43', -1);
-INSERT INTO `t_admin_user_role` VALUES (39, 37, 7, '2018-12-22 15:27:14', 0);
-INSERT INTO `t_admin_user_role` VALUES (40, 37, 5, '2018-12-22 15:27:19', 0);
-INSERT INTO `t_admin_user_role` VALUES (41, 38, 5, '2018-12-22 15:28:02', 0);
-INSERT INTO `t_admin_user_role` VALUES (42, 38, 7, '2018-12-22 15:28:03', 0);
-INSERT INTO `t_admin_user_role` VALUES (43, 39, 7, '2018-12-22 15:28:26', 0);
-INSERT INTO `t_admin_user_role` VALUES (44, 40, 7, '2018-12-22 15:28:51', 0);
-INSERT INTO `t_admin_user_role` VALUES (45, 42, 7, '2018-12-22 15:29:28', 0);
-INSERT INTO `t_admin_user_role` VALUES (46, 41, 7, '2018-12-22 15:29:33', 0);
-INSERT INTO `t_admin_user_role` VALUES (47, 43, 12, '2018-12-22 17:48:36', -1);
-INSERT INTO `t_admin_user_role` VALUES (48, 43, 15, '2018-12-22 17:51:11', -1);
-INSERT INTO `t_admin_user_role` VALUES (49, 10, 2, '2018-12-25 15:20:03', 0);
-INSERT INTO `t_admin_user_role` VALUES (50, 44, 2, '2018-12-25 15:20:39', 0);
-INSERT INTO `t_admin_user_role` VALUES (51, 32, 16, '2019-01-02 11:22:22', 0);
-INSERT INTO `t_admin_user_role` VALUES (52, 45, 17, '2019-01-02 15:16:44', -1);
-INSERT INTO `t_admin_user_role` VALUES (53, 45, 17, '2019-01-02 16:07:23', 0);
-INSERT INTO `t_admin_user_role` VALUES (54, 46, 17, '2019-01-02 16:07:56', 0);
-INSERT INTO `t_admin_user_role` VALUES (55, 26, 18, '2019-01-03 15:18:35', 0);
-INSERT INTO `t_admin_user_role` VALUES (56, 27, 18, '2019-01-03 15:18:44', 0);
-INSERT INTO `t_admin_user_role` VALUES (57, 29, 18, '2019-01-03 15:33:59', 0);
-INSERT INTO `t_admin_user_role` VALUES (58, 34, 19, '2019-01-07 00:38:59', 0);
-INSERT INTO `t_admin_user_role` VALUES (59, 49, 13, '2019-01-14 17:54:43', 0);
-INSERT INTO `t_admin_user_role` VALUES (60, 48, 13, '2019-01-14 17:54:48', 0);
-INSERT INTO `t_admin_user_role` VALUES (61, 43, 13, '2019-01-14 17:54:54', 0);
-INSERT INTO `t_admin_user_role` VALUES (62, 47, 13, '2019-01-14 17:55:51', 0);
-INSERT INTO `t_admin_user_role` VALUES (63, 51, 13, '2019-01-14 17:57:04', 0);
-INSERT INTO `t_admin_user_role` VALUES (64, 50, 13, '2019-01-14 17:57:10', 0);
-INSERT INTO `t_admin_user_role` VALUES (65, 52, 13, '2019-01-14 17:57:48', 0);
-INSERT INTO `t_admin_user_role` VALUES (66, 53, 13, '2019-01-14 17:58:24', 0);
-INSERT INTO `t_admin_user_role` VALUES (67, 54, 13, '2019-01-14 17:59:06', -1);
-INSERT INTO `t_admin_user_role` VALUES (68, 55, 13, '2019-01-14 18:00:00', 0);
-INSERT INTO `t_admin_user_role` VALUES (69, 56, 13, '2019-01-14 18:00:41', 0);
-INSERT INTO `t_admin_user_role` VALUES (70, 34, 13, '2019-01-14 18:01:03', 0);
-INSERT INTO `t_admin_user_role` VALUES (71, 27, 13, '2019-01-14 18:23:51', 0);
-INSERT INTO `t_admin_user_role` VALUES (72, 26, 13, '2019-01-14 18:24:02', 0);
-INSERT INTO `t_admin_user_role` VALUES (73, 29, 13, '2019-01-14 18:24:11', 0);
-INSERT INTO `t_admin_user_role` VALUES (74, 50, 18, '2019-01-14 18:24:19', 0);
-INSERT INTO `t_admin_user_role` VALUES (75, 57, 13, '2019-01-16 11:18:01', 0);
-INSERT INTO `t_admin_user_role` VALUES (76, 58, 13, '2019-01-16 11:23:32', 0);
-INSERT INTO `t_admin_user_role` VALUES (77, 63, 13, '2019-01-23 16:51:32', 0);
-INSERT INTO `t_admin_user_role` VALUES (78, 62, 13, '2019-01-24 16:06:13', 0);
-INSERT INTO `t_admin_user_role` VALUES (79, 64, 13, '2019-01-24 16:06:18', 0);
-INSERT INTO `t_admin_user_role` VALUES (80, 61, 13, '2019-01-24 16:07:24', 0);
-INSERT INTO `t_admin_user_role` VALUES (81, 59, 13, '2019-01-24 16:07:30', 0);
-INSERT INTO `t_admin_user_role` VALUES (82, 66, 20, '2019-01-30 13:47:46', 0);
-INSERT INTO `t_admin_user_role` VALUES (83, 67, 6, '2019-02-04 15:47:27', -1);
-INSERT INTO `t_admin_user_role` VALUES (84, 54, 13, '2019-02-19 08:46:48', 0);
-INSERT INTO `t_admin_user_role` VALUES (85, 67, 4, '2019-02-23 09:29:54', -1);
-INSERT INTO `t_admin_user_role` VALUES (86, 67, 6, '2019-02-23 09:30:11', -1);
-INSERT INTO `t_admin_user_role` VALUES (87, 67, 4, '2019-02-23 09:33:12', -1);
-INSERT INTO `t_admin_user_role` VALUES (88, 67, 6, '2019-02-23 09:33:25', -1);
-INSERT INTO `t_admin_user_role` VALUES (89, 9, 2, '2019-02-23 09:33:36', 0);
-INSERT INTO `t_admin_user_role` VALUES (90, 67, 4, '2019-02-23 09:33:49', -1);
-INSERT INTO `t_admin_user_role` VALUES (91, 67, 6, '2019-02-23 09:51:49', -1);
-INSERT INTO `t_admin_user_role` VALUES (92, 67, 6, '2019-02-23 09:59:29', 0);
-INSERT INTO `t_admin_user_role` VALUES (93, 70, 21, '2019-02-26 15:59:53', 0);
-INSERT INTO `t_admin_user_role` VALUES (94, 65, 18, '2019-03-02 10:20:06', 0);
-INSERT INTO `t_admin_user_role` VALUES (95, 65, 13, '2019-03-02 10:20:08', 0);
-INSERT INTO `t_admin_user_role` VALUES (96, 69, 13, '2019-03-02 10:20:14', 0);
-INSERT INTO `t_admin_user_role` VALUES (97, 69, 18, '2019-03-02 10:20:15', 0);
-INSERT INTO `t_admin_user_role` VALUES (98, 24, 13, '2019-03-02 10:20:23', 0);
-INSERT INTO `t_admin_user_role` VALUES (99, 24, 18, '2019-03-02 10:20:24', 0);
-INSERT INTO `t_admin_user_role` VALUES (100, 71, 21, '2019-03-04 10:35:56', 0);
-INSERT INTO `t_admin_user_role` VALUES (101, 73, 22, '2019-03-11 14:25:50', 0);
-INSERT INTO `t_admin_user_role` VALUES (102, 74, 22, '2019-03-11 14:25:59', 0);
-INSERT INTO `t_admin_user_role` VALUES (103, 75, 22, '2019-03-11 14:26:03', 0);
-INSERT INTO `t_admin_user_role` VALUES (104, 76, 22, '2019-03-11 14:26:06', 0);
-INSERT INTO `t_admin_user_role` VALUES (105, 77, 22, '2019-03-11 14:26:37', 0);
-INSERT INTO `t_admin_user_role` VALUES (106, 78, 22, '2019-03-11 14:28:03', 0);
-INSERT INTO `t_admin_user_role` VALUES (107, 79, 22, '2019-03-11 14:28:08', 0);
-INSERT INTO `t_admin_user_role` VALUES (108, 80, 22, '2019-03-11 14:28:12', 0);
-INSERT INTO `t_admin_user_role` VALUES (109, 81, 26, '2019-03-19 18:07:06', 0);
-INSERT INTO `t_admin_user_role` VALUES (110, 82, 21, '2019-03-20 17:10:51', 0);
-INSERT INTO `t_admin_user_role` VALUES (111, 83, 27, '2019-03-21 17:16:26', 0);
-INSERT INTO `t_admin_user_role` VALUES (112, 84, 28, '2019-03-22 15:49:02', 0);
-INSERT INTO `t_admin_user_role` VALUES (113, 85, 29, '2019-03-22 16:18:12', 0);
-INSERT INTO `t_admin_user_role` VALUES (114, 86, 30, '2019-03-22 16:43:56', 0);
-INSERT INTO `t_admin_user_role` VALUES (115, 87, 31, '2019-03-22 17:19:00', 0);
-INSERT INTO `t_admin_user_role` VALUES (116, 88, 32, '2019-03-22 17:42:07', 0);
-INSERT INTO `t_admin_user_role` VALUES (117, 89, 21, '2019-03-25 17:04:16', 0);
-INSERT INTO `t_admin_user_role` VALUES (118, 90, 21, '2019-03-25 17:04:21', 0);
-INSERT INTO `t_admin_user_role` VALUES (119, 91, 21, '2019-03-25 17:04:26', 0);
-INSERT INTO `t_admin_user_role` VALUES (120, 92, 21, '2019-03-25 17:04:30', 0);
-INSERT INTO `t_admin_user_role` VALUES (121, 93, 21, '2019-03-25 17:04:35', 0);
-INSERT INTO `t_admin_user_role` VALUES (122, 94, 21, '2019-03-25 17:04:39', 0);
-INSERT INTO `t_admin_user_role` VALUES (123, 95, 21, '2019-03-25 17:04:42', 0);
-INSERT INTO `t_admin_user_role` VALUES (124, 97, 23, '2019-03-25 17:07:32', 0);
-INSERT INTO `t_admin_user_role` VALUES (125, 98, 23, '2019-03-25 17:07:36', 0);
-INSERT INTO `t_admin_user_role` VALUES (126, 96, 21, '2019-03-25 17:07:43', 0);
-INSERT INTO `t_admin_user_role` VALUES (127, 99, 33, '2019-03-29 16:12:39', 0);
-INSERT INTO `t_admin_user_role` VALUES (128, 100, 34, '2019-04-01 15:35:40', 0);
-INSERT INTO `t_admin_user_role` VALUES (129, 101, 35, '2019-04-03 14:00:08', 0);
-INSERT INTO `t_admin_user_role` VALUES (130, 102, 35, '2019-04-04 10:57:20', 0);
-INSERT INTO `t_admin_user_role` VALUES (131, 103, 36, '2019-04-16 16:31:34', 0);
-INSERT INTO `t_admin_user_role` VALUES (132, 104, 37, '2019-04-16 18:15:16', 0);
-INSERT INTO `t_admin_user_role` VALUES (133, 105, 38, '2019-04-16 21:50:41', 0);
-INSERT INTO `t_admin_user_role` VALUES (134, 106, 39, '2019-04-22 09:02:22', 0);
-INSERT INTO `t_admin_user_role` VALUES (135, 107, 39, '2019-04-22 09:17:23', 0);
-INSERT INTO `t_admin_user_role` VALUES (136, 108, 40, '2019-04-22 17:31:13', 0);
-INSERT INTO `t_admin_user_role` VALUES (137, 109, 2, '2019-04-25 11:31:53', 0);
-INSERT INTO `t_admin_user_role` VALUES (138, 110, 2, '2019-04-25 11:44:45', 0);
-INSERT INTO `t_admin_user_role` VALUES (139, 111, 2, '2019-04-25 11:46:26', 0);
-INSERT INTO `t_admin_user_role` VALUES (140, 113, 2, '2019-04-25 11:47:02', 0);
-INSERT INTO `t_admin_user_role` VALUES (141, 112, 2, '2019-04-25 11:47:05', 0);
 
 -- ----------------------------
 -- Table structure for ts_dept_user
