@@ -35,7 +35,7 @@
 						<div class="ibox">
 							<div class="ibox-title">
 								<div class="ibox-tools">
-									<select data-placeholder="选择" id="select_proj" class="chosen-select" style="width:250px;display: inline-block;;float:left; padding:0; margin: 0 0 7px" tabindex="2">
+									<select th:if="${root==1}" data-placeholder="选择" id="select_proj" class="chosen-select" style="width:250px;display: inline-block;;float:left; padding:0; margin: 0 0 7px" tabindex="2">
 										<option></option>
 										<option value="0">全部</option>
 										<option th:each="st:${proj_page.result}" th:value="${st.id}" th:selected="${sp==st.id}" th:text="${st.proj_name}"></option>
