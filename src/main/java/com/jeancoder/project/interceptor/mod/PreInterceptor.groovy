@@ -17,6 +17,7 @@ import com.jeancoder.project.ready.util.FuncUtil
 def mod_1 = FuncUtil.build_app_func(1, '系统配置', null, 'project', 'fa-stack-exchange');
 def mod_1_1 = FuncUtil.build_app_func(101, '项目管理', 1, 'project/list', '', 2);
 def mod_1_2 = FuncUtil.build_app_func(102, '功能管理', 1, 'appfunc/list', '', 2);
+def mod_1_3 = FuncUtil.build_app_func(103, '配置管理', 1, 'sysconf/list', '', 2);
 
 def mod_2 = FuncUtil.build_app_func(2, '权限系统', null, 'auth', 'fa-support');
 def mod_2_1 = FuncUtil.build_app_func(201, '用户管理', 2, 'auth/user/list', '', 2);
@@ -29,7 +30,7 @@ def mod_4 = FuncUtil.build_app_func(4, '操作日志', null, 'oplog/index', 'fa-
 
 
 List<AppFunction> result = [];
-result.addAll([mod_1, mod_1_1, mod_1_2]);
+result.addAll([mod_1, mod_1_1, mod_1_2, mod_1_3]);
 result.addAll([mod_2, mod_2_1, mod_2_2, mod_2_3]);
 result.addAll([mod_3]);
 result.add(mod_4);

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 配置管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/plugins/select2/select2.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/plugins/switchery/switchery.css(sp=${pub_bucket})}" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-lg-10">
+					<h2>系统配置管理</h2>
+					<ol class="breadcrumb">
+						<li><a href="index.html">Home</a></li>
+						<li><a href="javascript:;">配置列表</a></li>
+						<li class="active"><strong>添加配置</strong></li>
+					</ol>
+				</div>
+				<div class="col-lg-2"></div>
+			</div>
+			<div class="wrapper wrapper-content animated fadeInRight">
+				
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>基本信息</h5>
+								<div class="ibox-tools">
+									<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a> 
+									<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"> <i class="fa fa-wrench"></i></a>
+									<ul class="dropdown-menu dropdown-user">
+										<li><a href="#">Config option 1</a></li>
+									</ul>
+									<a class="close-link"> <i class="fa fa-times"></i></a>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<form method="get" class="form-horizontal">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">配置名称</label>
+										<div class="col-sm-5">
+											<input type="text" class="form-control" id="conf_title" name="conf_title">
+										</div>
+										<div class="col-sm-5">
+											<select class="form-control" name="conf_code" id="conf_code">
+												<option></option>
+												<option th:each="f:${supp_configs}" th:selected="${f.code==code}" th:value="${f.code }" th:text="${f.name }"></option>
+											</select>
+										</div>
+									</div>
+									<div class="hr-line-dashed"></div>
+									
+									<div class="form-group">
+										<label class="col-sm-2 control-label">配置说明</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="conf_info"> 
+											<span class="help-block m-b-none">请输入配置备注说明信息.</span>
+										</div>
+									</div>
+									<div class="hr-line-dashed"></div>
+									
+									
+									<div class="form-group">
+										<label class="col-sm-2 control-label">是否启用</label>
+										<div class="col-sm-10">
+											<input type="checkbox" class="js-switch" checked id="func_whole"/>
+										</div>
+									</div>
+									<div class="hr-line-dashed"></div>
+									
+									<block th:if="${select_config}" th:each="cd:${select_config.mods}">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">[[${cd.name}]]</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control cd_conf" th:key="${cd.key}" th:info="${cd.name}" th:placeholder="|请输入${cd.name}|"/>
+										</div>
+									</div>
+									<div class="hr-line-dashed"></div>
+									</block>
+									
+									<div class="form-group">
+										<div class="col-sm-4 col-sm-offset-2">
+											<button class="btn btn-primary save_funcs" type="button">保存</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="../common/foot"></div>
+		</div>
+	</div>
+	
+	
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/js/plugins/select2/select2.full.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/switchery/switchery.js(sp=${pub_bucket})}"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	
+</body>
+
+<script type="text/javascript">
+$(function() {
+	var elem = document.querySelector('.js-switch');
+	var switchery = new Switchery(elem, {
+		color : '#1AB394'
+	});
+	
+	$("#conf_code").select2({
+		placeholder: "选择配置类型",
+        allowClear: true
+	});
+	
+	$("#conf_code").on("change", function() {
+		let conf_code = $(this).val();
+		location.href = '/project/sysconf/add?code=' + conf_code + '&' + new Date().getTime();
+	});
+	
+	$(".save_funcs").on("click", function(){
+		let conf_title = $.trim($("#conf_title").val());
+		let conf_code = $.trim($("#conf_code").val());
+		let conf_info = $.trim($("#conf_info").val());
+		let func_whole = 0;
+		
+		if($("#func_whole").is(":checked")) {
+			func_whole = 1;
+		}
+		
+		if(!conf_title) {
+			layer.msg("请输入配置名称", {icon: 2});
+			return;
+		}
+		if(!conf_code) {
+			layer.msg("请选择配置类型", {icon: 2});
+			return;
+		}
+		if(!conf_info) {
+			layer.msg("请输入配置说明", {icon: 2});
+			return;
+		}
+		let details = [];
+		let full_input = true;
+		let full_info = '';
+		$(".cd_conf").each(function() {
+			let value = $(this).val();
+			let key = $(this).attr('key');
+			let info = $(this).attr('info');
+			if(!value) {
+				full_input = false;
+				full_info = info;
+				return;
+			}
+			details.push({key:key, value:value, name:info});
+		});
+		if(!full_input) {
+			layer.msg("请输入" + full_info, {icon: 2}); return;
+		}
+		let params = {title:conf_title,code:conf_code,info:conf_info,use:func_whole,detail:JSON.stringify(details)};
+		console.log(params);
+		var url = "/project/sysconf/aj/save/";
+		var index = layer.load(0, {shade: false});
+		$.post(url, params, function(data){
+			layer.close(index);
+			if(data.available) {
+				layer.alert('操作成功', {
+			        skin: 'layui-layer-lan',
+			        shift: 4 //动画类型
+			    }, function(){
+			    	location.href = "/project/sysconf/list/?" + new Date().getTime();
+			    });
+			} else {
+				var code = data.messages[0];
+				layer.msg(msg, {icon: 2});
+			}
+		});
+	});
+});
+</script>
+
+</html>

@@ -6825,4 +6825,21 @@ CREATE TABLE `ts_project_user`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
+-- ----------------------------
+-- Table structure for t_sys_conf
+-- ----------------------------
+DROP TABLE IF EXISTS `t_sys_conf`;
+CREATE TABLE `t_sys_conf` (
+  `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(16) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `info` varchar(255) DEFAULT NULL,
+  `a_time` datetime DEFAULT NULL,
+  `c_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `flag` tinyint(4) NOT NULL DEFAULT '0',
+  `config` text,
+  `ss` char(2) NOT NULL DEFAULT '00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
 SET FOREIGN_KEY_CHECKS = 1;
