@@ -10,7 +10,12 @@ List<ConfigEn> configs = JcTemplate.INSTANCE().find(ConfigEn, 'select * from Con
 
 def conf = null;
 if(configs && !configs.empty) {
-	conf = configs.get(0);
+	conf = configs.get(0).config;
+}
+if(conf) {
+	try {
+		conf = JackSonBeanMapper.jsonToMap(conf);
+	} catch(any) {}
 }
 
 return SimpleAjax.available('', conf);
