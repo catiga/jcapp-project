@@ -78,8 +78,7 @@
 													<span th:if="${a.ss=='10'}">启用</span>
 												</td>
 												<td>
-													<button class="btn btn-white btn-sm edit" th:attr_id="${a.id }"><i class="fa fa-pencil"></i> 编辑 </button>
-													<button class="btn btn-info btn-sm func_config" type="button" th:attr_id="${a.id }"><i class="fa fa-paste"></i> 详情</button>
+													<button class="btn btn-white btn-sm edit_config" type="button" th:attr_id="${a.id }"><i class="fa fa-pencil"></i> 编辑 </button>
 												</td>
 	                                    	</tr>
 	                                    </tbody>
@@ -110,6 +109,10 @@
 
 <script type="text/javascript">
 $(function() {
+	$(".edit_config").on("click", function() {
+		let attr_id = $(this).attr('attr_id');
+		location.href = '/project/sysconf/add?id=' + attr_id + '&' + new Date().getTime();
+	});
 });
 </script>
 
