@@ -71,7 +71,7 @@
 									</div>
 									<div class="hr-line-dashed"></div>
 									
-									
+									<!-- 
 									<div class="form-group">
 										<label class="col-sm-2 control-label">是否启用</label>
 										<div class="col-sm-10">
@@ -79,12 +79,15 @@
 										</div>
 									</div>
 									<div class="hr-line-dashed"></div>
+									 -->
 									
 									<block th:if="${select_config}" th:each="cd:${select_config.mods}">
 									<div class="form-group">
 										<label class="col-sm-2 control-label">[[${cd.name}]]</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control cd_conf" th:key="${cd.key}" th:info="${cd.name}" th:value="${cd.value}" th:placeholder="|请输入${cd.name}|"/>
+										<div class="col-sm-10" th:switch="${cd.inputtype}">
+											<input th:case="input" type="text" class="form-control cd_conf" th:inputtype="${cd.inputtype}" th:key="${cd.key}" th:info="${cd.name}" th:value="${cd.value}" th:placeholder="|请输入${cd.name}|"/>
+											<input th:case="checkbox" type="checkbox" class="js-switch cd_conf" th:inputtype="${cd.inputtype}" th:key="${cd.key}" th:info="${cd.name}" th:checked="${cd.value==1}?'checked'" th:value="${cd.value}"/>
+											<p th:case="*">类型设置错误</p>
 										</div>
 									</div>
 									<div class="hr-line-dashed"></div>
@@ -167,10 +170,14 @@ $(function() {
 		let full_input = true;
 		let full_info = '';
 		$(".cd_conf").each(function() {
+			let inputtype = $(this).attr('inputtype');
 			let value = $(this).val();
+			if(inputtype=='checkbox') {
+				value = $(this).is(":checked")?1:0;
+			}
 			let key = $(this).attr('key');
 			let info = $(this).attr('info');
-			if(!value) {
+			if(value==='' || value==null) {
 				full_input = false;
 				full_info = info;
 				return;
@@ -180,7 +187,7 @@ $(function() {
 		if(!full_input) {
 			layer.msg("请输入" + full_info, {icon: 2}); return;
 		}
-		let params = {id:config_id,title:conf_title,code:conf_code,info:conf_info,use:func_whole,detail:JSON.stringify(details)};
+		let params = {id:config_id,title:conf_title,code:conf_code,info:conf_info,detail:JSON.stringify(details)};
 		console.log(params);
 		var url = "/project/sysconf/aj/save/";
 		var index = layer.load(0, {shade: false});

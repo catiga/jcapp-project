@@ -8,4 +8,6 @@ class ConfMod {
 	
 	String name;
 	
+	String inputtype = 'input';
+	
 }

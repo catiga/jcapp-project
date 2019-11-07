@@ -79,6 +79,9 @@
 												</td>
 												<td>
 													<button class="btn btn-white btn-sm edit_config" type="button" th:attr_id="${a.id }"><i class="fa fa-pencil"></i> 编辑 </button>
+													
+													<button th:if="${a.ss=='00'}" class="btn btn-info btn-sm swit_config" type="button" th:attr_id="${a.id }"><i class="fa fa-pencil"></i> 启用 </button>
+													<button th:if="${a.ss=='10'}" class="btn btn-warning btn-sm swit_config" type="button" th:attr_id="${a.id }"><i class="fa fa-pencil"></i> 停用 </button>
 												</td>
 	                                    	</tr>
 	                                    </tbody>
@@ -112,6 +115,16 @@ $(function() {
 	$(".edit_config").on("click", function() {
 		let attr_id = $(this).attr('attr_id');
 		location.href = '/project/sysconf/add?id=' + attr_id + '&' + new Date().getTime();
+	});
+	$(".swit_config").on("click", function() {
+		let attr_id = $(this).attr('attr_id');
+		$.post('/project/sysconf/aj/ssconf', {id:attr_id}, function(data) {
+			if(data.available) {
+				location.reload();
+			} else {
+				layer.alert(data.messages[1], {icon: 2})
+			}
+		});
 	});
 });
 </script>
