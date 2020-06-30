@@ -69,8 +69,10 @@ public class SysProjectInfo {
 	
 	private String user_name;
 	
+	//当前project的直接归属项目
 	BigInteger dbpid;
 	
+	//当前project的根归属项目
 	BigInteger rbpid;
 
 	public BigInteger getId() {
