@@ -43,9 +43,9 @@ SysCity province = city_service.get_by_id(form.province);
 SysCity city = city_service.get_by_id(form.city);
 SysCity zone = city_service.get_by_id(form.zone);
 
-if(GlobalHolder.proj.root!=1) {
-	return SimpleAjax.notAvailable('unsupport_op,编辑门店信息请联系管理员');
-}
+//if(GlobalHolder.proj.root!=1) {
+//	return SimpleAjax.notAvailable('unsupport_op,编辑门店信息请联系管理员');
+//}
 
 if(form.id!=null&&form.id>0) {
 	StoreInfo store = store_service.get_by_id_from_root(form.id);
