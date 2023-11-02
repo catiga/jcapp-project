@@ -21,7 +21,7 @@ String domain = req.getServerName();
 int port = req.getServerPort();
 //req.setAttribute('pub_bucket', 'https://cdn.iplaysky.com/static/');
 // req.setAttribute('pub_bucket', 'https://static.pdr365.com/static/');
-req.setAttribute('pub_bucket', 'http://static.jcloudapp.fancynote.vip/static/')
+req.setAttribute('pub_bucket', 'https://ticket.wisetrip.com/res/')
 
 DomainObject domain_object = domain_service.get_sys_domain(domain);
 
