@@ -21,7 +21,8 @@ String domain = req.getServerName();
 int port = req.getServerPort();
 //req.setAttribute('pub_bucket', 'https://cdn.iplaysky.com/static/');
 // req.setAttribute('pub_bucket', 'https://static.pdr365.com/static/');
-req.setAttribute('pub_bucket', 'http://static.jcloudapp.chinaren.xyz/static/')
+//req.setAttribute('pub_bucket', 'http://static.jcloudapp.chinaren.xyz/static/')
+req.setAttribute('pub_bucket', 'https://static.hash.bid/static/')
 
 DomainObject domain_object = domain_service.get_sys_domain(domain);
 
