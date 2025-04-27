@@ -1,6 +1,9 @@
 package com.jeancoder.project.entry.project.config.aj
 
 import com.jeancoder.app.sdk.JC
+import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
+import com.jeancoder.core.util.JackSonBeanMapper
 import com.jeancoder.project.ready.ajax.SimpleAjax
 import com.jeancoder.project.ready.dto.ProjectGeneralConfig
 import com.jeancoder.project.ready.dto.SysProjectInfo
@@ -11,7 +14,7 @@ import com.jeancoder.project.ready.service.ProjectServiceCarry
 import com.jeancoder.project.ready.util.RemoteUtil
 
 //var param = {partner:partner,disname:disname,sc_info:dis_tips,sc_code:sc_code,sc_type:sc_type};
-
+JCLogger logger = JCLoggerFactory.getLogger('save_key')
 def mch_id = JC.request.param('mch_id');
 def pri_key = JC.request.param('pri_key');
 def pub_key = JC.request.param('pub_key');
@@ -29,7 +32,7 @@ ProjectGeneralConfigService service = ProjectGeneralConfigService.INSTANCE();
 ProjectGeneralConfig config = service.get_(sel_project.id, sc_type, sc_code);
 
 def allow_pts = JC.internal.call(SysSupp.class, 'trade', '/incall/pts', null);
-
+logger.info("internal call /incall/pts result: {}", JackSonBeanMapper.toJson(allow_pts))
 SysSupp ss = allow_pts.find{it->it.tyc==sc_type&&it.code==sc_code}
 
 if(ss==null) {
