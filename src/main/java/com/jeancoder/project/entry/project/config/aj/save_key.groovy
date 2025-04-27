@@ -1,22 +1,19 @@
 package com.jeancoder.project.entry.project.config.aj
 
 import com.jeancoder.app.sdk.JC
-import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
 import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.core.util.JackSonBeanMapper
 import com.jeancoder.project.ready.ajax.SimpleAjax
 import com.jeancoder.project.ready.dto.ProjectGeneralConfig
 import com.jeancoder.project.ready.dto.SysProjectInfo
-import com.jeancoder.project.ready.helper.GlobalHolder
 import com.jeancoder.project.ready.obj.SysSupp
 import com.jeancoder.project.ready.service.ProjectGeneralConfigService
 import com.jeancoder.project.ready.service.ProjectServiceCarry
-import com.jeancoder.project.ready.util.RemoteUtil
 
 //var param = {partner:partner,disname:disname,sc_info:dis_tips,sc_code:sc_code,sc_type:sc_type};
 
-JCLogger logger = LoggerSource.getLogger("save_key");
+JCLogger logger = JCLoggerFactory.getLogger("save_key");
 def mch_id = JC.request.param('mch_id');
 def pri_key = JC.request.param('pri_key');
 def pub_key = JC.request.param('pub_key');
@@ -39,7 +36,7 @@ logger.info("internal call /incall/pts result: {}", JackSonBeanMapper.toJson(all
 if (!allow_pts.available || !allow_pts.data) {
 	return SimpleAjax.notAvailable('unable to find pts from trade');
 }
-SysSupp ss = allow_pts.data.find{it->it.tyc==sc_type&&it.code==sc_code}
+def ss = allow_pts.data.find{it->it.tyc==sc_type&&it.code==sc_code}
 
 if(ss==null) {
 	return SimpleAjax.notAvailable('not_allow');
