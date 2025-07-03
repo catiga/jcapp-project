@@ -57,7 +57,7 @@ ProjectGeneralConfig config = service.get_(sel_project.id, sc_type, sc_code);
 
 SimpleAjax allow_pts = JC.internal.call(SimpleAjax.class, 'trade', '/incall/pts', null);
 logger.info("allow_pts: {}", JackSonBeanMapper.toJson(allow_pts))
-SysSupp ss = allow_pts.data.find{it->it.tyc==sc_type&&it.code==sc_code}
+def ss = allow_pts.data.find{it->it.tyc==sc_type&&it.code==sc_code}
 
 if(ss==null) {
 	return SimpleAjax.notAvailable('not_allow');
