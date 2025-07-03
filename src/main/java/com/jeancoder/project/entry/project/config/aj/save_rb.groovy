@@ -1,5 +1,8 @@
 package com.jeancoder.project.entry.project.config.aj
 
+import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
+import com.jeancoder.core.util.JackSonBeanMapper
 import org.apache.commons.fileupload.FileItem
 import org.apache.commons.io.FileUtils
 
@@ -16,7 +19,7 @@ import com.jeancoder.project.ready.util.RemoteUtil
 
 //var param = {partner:partner,disname:disname,sc_info:dis_tips,sc_code:sc_code,sc_type:sc_type};
 
-
+JCLogger logger = JCLoggerFactory.getLogger('')
 //这里应指向公共挂载硬盘
 //def root_path = '/Users/jackielee/Desktop/tmp';
 
@@ -52,9 +55,9 @@ ProjectGeneralConfigService service = ProjectGeneralConfigService.INSTANCE();
 
 ProjectGeneralConfig config = service.get_(sel_project.id, sc_type, sc_code);
 
-def allow_pts = JC.internal.call(SysSupp.class, 'trade', '/incall/pts', null);
-
-SysSupp ss = allow_pts.find{it->it.tyc==sc_type&&it.code==sc_code}
+SimpleAjax allow_pts = JC.internal.call(SimpleAjax.class, 'trade', '/incall/pts', null);
+logger.info("allow_pts: {}", JackSonBeanMapper.toJson(allow_pts))
+SysSupp ss = allow_pts.data.find{it->it.tyc==sc_type&&it.code==sc_code}
 
 if(ss==null) {
 	return SimpleAjax.notAvailable('not_allow');
