@@ -52,7 +52,7 @@ ProjectGeneralConfigService service = ProjectGeneralConfigService.INSTANCE();
 
 ProjectGeneralConfig config = service.get_(sel_project.id, sc_type, sc_code);
 
-def allow_pts = RemoteUtil.connectAsArray(SysSupp.class, 'trade', '/incall/pts', null);
+def allow_pts = JC.internal.call(SysSupp.class, 'trade', '/incall/pts', null);
 
 SysSupp ss = allow_pts.find{it->it.tyc==sc_type&&it.code==sc_code}
 
